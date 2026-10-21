@@ -14,7 +14,14 @@
   "report_name": "Plan vs Actual Application",
   "report_type": "Script Report",
   "roles": [
-    {"role": "System Manager"},
-    {"role": "Agriculture Manager"}
+    {
+      "role": "System Manager"
+    },
+    {
+      "role": "CNP Agronomist"
+    },
+    {
+      "role": "Farm Manager"
+    }
   ]
 }

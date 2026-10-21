@@ -29,8 +29,8 @@ frappe.query_reports["Application Register"] = {
             options: "Item"
         },
         {
-            fieldname: "operator",
-            label: "Operator",
+            fieldname: "supervisor",
+            label: "Supervisor",
             fieldtype: "Link",
             options: "Employee"
         }

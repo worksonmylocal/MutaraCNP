@@ -1,0 +1,10 @@
+.DS_Store
+*.pyc
+*.egg-info
+*.swp
+tags
+node_modules
+__pycache__
+# The Expo field app is versioned in its own repository - it has a separate
+# release cycle from the Frappe app, so it lives here but is not tracked here.
+mobile/

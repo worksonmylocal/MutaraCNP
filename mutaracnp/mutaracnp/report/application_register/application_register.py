@@ -18,7 +18,6 @@ def get_columns():
         {"label": "Variance (Kg)", "fieldname": "variance_kg",               "fieldtype": "Float", "width": 100},
         {"label": "Method",        "fieldname": "application_method",        "fieldtype": "Data",  "width": 110},
         {"label": "Weather",       "fieldname": "weather_conditions",        "fieldtype": "Data",  "width": 100},
-        {"label": "Operator",      "fieldname": "operator",                  "fieldtype": "Link",  "options": "Employee",   "width": 130},
         {"label": "Supervisor",    "fieldname": "supervisor",                "fieldtype": "Link",  "options": "Employee",   "width": 130},
         {"label": "Stock Entry",   "fieldname": "stock_entry",               "fieldtype": "Link",  "options": "Stock Entry","width": 140},
         {"label": "Reference",     "fieldname": "name",                      "fieldtype": "Link",  "options": "Fertilizer Application", "width": 150},
@@ -41,8 +40,8 @@ def get_data(filters):
         conditions["block"] = filters["block"]
     if filters.get("fertilizer_product"):
         conditions["fertilizer_product"] = filters["fertilizer_product"]
-    if filters.get("operator"):
-        conditions["operator"] = filters["operator"]
+    if filters.get("supervisor"):
+        conditions["supervisor"] = filters["supervisor"]
 
     records = frappe.get_all(
         "Fertilizer Application",
@@ -51,7 +50,7 @@ def get_data(filters):
             "name", "application_date", "block", "fertilizer_product",
             "planned_quantity_kg", "actual_quantity_applied_kg", "variance_kg",
             "application_method", "weather_conditions",
-            "operator", "supervisor", "stock_entry",
+            "supervisor", "stock_entry",
         ],
         order_by="application_date asc, block asc",
     )

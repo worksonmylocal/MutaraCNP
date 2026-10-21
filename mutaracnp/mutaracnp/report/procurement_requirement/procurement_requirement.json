@@ -15,7 +15,17 @@
   "report_name": "Procurement Requirement",
   "report_type": "Script Report",
   "roles": [
-    {"role": "System Manager"},
-    {"role": "Agriculture Manager"}
+    {
+      "role": "System Manager"
+    },
+    {
+      "role": "CNP Agronomist"
+    },
+    {
+      "role": "Farm Manager"
+    },
+    {
+      "role": "Storekeeper"
+    }
   ]
 }
