@@ -1,0 +1,331 @@
+/* MutaraCNP dashboard design system — shared by /dashboard and /manager */
+:root{
+  /* Shades of black — from the Upande logo */
+  --ink:#0a0a0a;
+  --ink-1:#1a1a18;
+  --ink-2:#2a2a26;
+  --ink-3:#3a3a34;
+  --ink-4:#5a5a52;
+  --ink-mute:#8a8780;
+  --ink-faint:#b8b6ae;
+
+  /* Surfaces */
+  --bg:#f4f3ef;
+  --surface:#fafaf6;
+  --surface-2:#ffffff;
+  --hairline:rgba(10,10,10,0.06);
+  --shadow-card:0 1px 0 rgba(10,10,10,0.04), 0 8px 32px -16px rgba(10,10,10,0.10);
+  --shadow-hover:0 1px 0 rgba(10,10,10,0.06), 0 24px 48px -24px rgba(10,10,10,0.18);
+
+  /* Single data accent — used sparingly */
+  --signal:#228883;
+
+  /* Semantic status */
+  --good:#1a8a3a;      --good-bg:rgba(26,138,58,0.10);
+  --bad:#c4302b;        --bad-bg:rgba(196,48,43,0.10);
+  --warn:#b9770e;        --warn-bg:rgba(185,119,14,0.10);
+  --info:#2c6bb3;        --info-bg:rgba(44,107,179,0.10);
+
+  --grad-ink:linear-gradient(135deg,#0a0a0a 0%,#3a3a34 100%);
+
+  --sans:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --display:'Fraunces',Georgia,serif;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--sans);font-size:14px;color:var(--ink-3);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+
+/* TOPBAR */
+.topbar{background:var(--surface-2);padding:14px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;border-bottom:1px solid var(--hairline)}
+.topbar__brand{display:flex;align-items:center;gap:16px}
+.topbar__logo{height:28px;width:auto}
+.topbar__divider{width:1px;height:22px;background:var(--hairline)}
+.topbar__product{font:600 14px var(--sans);color:var(--ink);letter-spacing:-.2px}
+.topbar__product small{display:block;font:500 10px var(--sans);text-transform:uppercase;letter-spacing:1.6px;color:var(--ink-mute);margin-top:1px}
+.topbar__nav{display:flex;gap:4px;margin-left:32px}
+.topbar__nav a{padding:8px 14px;font:500 13px var(--sans);color:var(--ink-4);text-decoration:none;border-radius:999px;transition:all .2s}
+.topbar__nav a:hover{background:rgba(10,10,10,0.04);color:var(--ink)}
+.topbar__nav a.on{background:var(--ink);color:#fafaf6}
+.topbar__right{display:flex;align-items:center;gap:14px;font-size:13px;color:var(--ink-4);margin-left:auto}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--grad-ink);color:#fafaf6;display:grid;place-items:center;font-weight:600;font-size:12px}
+
+/* PAGE */
+.page{max-width:1480px;margin:0 auto;padding:40px 40px 80px}
+.pagehead{display:grid;grid-template-columns:1fr auto;align-items:end;gap:32px;margin-bottom:32px}
+.pagehead__eyebrow{font:500 11px var(--sans);text-transform:uppercase;letter-spacing:2.2px;color:var(--ink-mute);margin-bottom:10px;display:inline-flex;align-items:center;gap:10px}
+.pagehead__eyebrow::before{content:"";width:18px;height:1px;background:var(--ink-3)}
+.pagehead__title{font:600 38px/1.05 var(--display);color:var(--ink);letter-spacing:-1px;margin:0}
+.pagehead__sub{margin-top:8px;font-size:15px;color:var(--ink-4)}
+.pagehead__tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+/* Selects styled as pills */
+.selectpill{position:relative;display:inline-flex;align-items:center;background:var(--surface-2);border-radius:999px;box-shadow:var(--shadow-card)}
+.selectpill select{appearance:none;-webkit-appearance:none;border:0;background:transparent;font:500 12px var(--sans);color:var(--ink);padding:10px 30px 10px 16px;border-radius:999px;cursor:pointer}
+.selectpill::after{content:"";position:absolute;right:14px;top:50%;width:6px;height:6px;border-right:1.5px solid var(--ink-mute);border-bottom:1.5px solid var(--ink-mute);transform:translateY(-65%) rotate(45deg);pointer-events:none}
+.iconbtn{width:40px;height:40px;border:0;background:var(--surface-2);border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--ink-4);box-shadow:var(--shadow-card);transition:all .2s}
+.iconbtn:hover{color:var(--ink);transform:translateY(-1px)}
+
+/* TABS */
+.tabs{display:inline-flex;gap:4px;margin-bottom:28px;background:rgba(10,10,10,0.04);padding:5px;border-radius:999px;max-width:100%;overflow-x:auto}
+.tab{background:transparent;border:0;font:500 13px var(--sans);color:var(--ink-4);padding:10px 18px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;transition:all .2s}
+.tab:hover{color:var(--ink)}
+.tab.on{background:var(--grad-ink);color:#fafaf6;box-shadow:0 4px 14px rgba(10,10,10,0.20)}
+.tab .tab-badge{background:var(--bad);color:#fff;font-size:10px;font-weight:700;border-radius:8px;padding:1px 6px}
+.tabpanel{display:none}
+.tabpanel.on{display:block;animation:fadein .2s}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* KPI cards */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px}
+.kpi{background:var(--surface-2);border-radius:20px;padding:24px 26px;box-shadow:var(--shadow-card);transition:all .25s;position:relative;overflow:hidden}
+.kpi:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover)}
+.kpi__label{font:500 11px var(--sans);text-transform:uppercase;letter-spacing:1.4px;color:var(--ink-mute);margin-bottom:12px}
+.kpi__value{font:600 34px/1 var(--sans);color:var(--ink);letter-spacing:-1px;font-feature-settings:"tnum"}
+.kpi__value.good{color:var(--good)} .kpi__value.bad{color:var(--bad)} .kpi__value.warn{color:var(--warn)} .kpi__value.info{color:var(--info)}
+.kpi__unit{font:400 12px var(--sans);color:var(--ink-mute);margin-top:6px}
+
+/* Card */
+.card{background:var(--surface-2);border-radius:24px;padding:28px 32px;box-shadow:var(--shadow-card);margin-bottom:18px}
+.card__head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:22px;gap:24px;flex-wrap:wrap}
+.card__head h3{margin:0;font:600 15px var(--sans);color:var(--ink);letter-spacing:-.2px;display:flex;align-items:center;gap:8px}
+.card__head .meta{font:500 12px var(--sans);color:var(--ink-mute)}
+
+.row-2{display:grid;grid-template-columns:2fr 1fr;gap:18px}
+.row-2-eq{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:1000px){.row-2,.row-2-eq{grid-template-columns:1fr}}
+
+.legend{display:flex;gap:18px;font-size:12px;color:var(--ink-mute)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:14px;border-radius:4px;display:inline-block}
+
+.chart{width:100%}
+
+/* Lists (rank / name / meta / qty) */
+.list{display:flex;flex-direction:column}
+.list__row{display:grid;grid-template-columns:36px 1fr auto;gap:14px;padding:13px 8px;border-bottom:1px solid var(--hairline);align-items:center;border-radius:10px}
+.list__row:last-child{border-bottom:0}
+.list__rank{font:500 13px var(--sans);color:var(--ink-mute);width:26px;height:26px;display:grid;place-items:center;border-radius:50%;background:rgba(10,10,10,0.04)}
+.list__name{font:600 14px var(--sans);color:var(--ink)}
+.list__meta{font-size:12px;color:var(--ink-mute);margin-top:2px}
+.list__qty{font:600 15px var(--sans);color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
+
+/* Estimate vs actual horizontal bars */
+.hb{display:grid;grid-template-columns:120px 1fr 100px;gap:16px;align-items:center;padding:10px 0;border-bottom:1px solid var(--hairline)}
+.hb:last-child{border-bottom:0}
+.hb__name{font:600 13px var(--sans);color:var(--ink)}
+.hb__lane{position:relative;height:16px}
+.hb__est{position:absolute;left:0;top:0;height:16px;background:rgba(10,10,10,0.05);border-radius:999px;width:100%}
+.hb__act{position:absolute;left:0;top:2px;height:12px;border-radius:999px;background:var(--signal)}
+.hb__act.bad{background:var(--bad)}
+.hb__pct{font:600 13px var(--sans);text-align:right;color:var(--ink-3);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* Single wide progress bar */
+.bigbar{height:26px;border-radius:999px;background:rgba(10,10,10,0.05);overflow:hidden;position:relative}
+.bigbar__fill{height:100%;border-radius:999px;background:var(--grad-ink);display:flex;align-items:center;justify-content:center;font:600 11px var(--sans);color:#fafaf6;transition:width .6s}
+
+/* Segmented progress (status mix) */
+.seg-bar{display:flex;height:14px;border-radius:8px;overflow:hidden;background:rgba(10,10,10,0.05)}
+.seg-bar .seg{height:100%}
+.seg-legend{display:flex;gap:14px;margin-top:10px;font-size:11px;color:var(--ink-mute);flex-wrap:wrap;align-items:center}
+.seg-legend span{display:inline-flex;align-items:center;gap:5px}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+
+/* Section drill-down card */
+.sec-card{padding:18px 20px;border-radius:16px;background:rgba(10,10,10,0.02);margin-bottom:10px;cursor:pointer;transition:background .2s}
+.sec-card:hover{background:rgba(10,10,10,0.035)}
+.sec-card__head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.sec-card__head b{font:600 14px var(--sans);color:var(--ink)}
+.sec-card__pct{font:600 18px var(--sans);color:var(--ink)}
+.sec-blocks{display:none;margin-top:12px;padding-top:12px;border-top:1px dashed var(--hairline)}
+.sec-blocks.open{display:block}
+.chip{display:inline-block;padding:4px 11px;border-radius:8px;font:600 11px var(--sans);margin:3px 3px 0 0;color:#fff}
+
+/* Status pills / badges */
+.pill{font-size:11px;padding:4px 11px;border-radius:999px;font-weight:700;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;letter-spacing:.2px;border:1px solid transparent}
+/* A dot carries the state for anyone who cannot separate the colours. */
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+.pill.good{background:#e7f6ec;color:#12762f;border-color:rgba(18,118,47,.22)}
+.pill.bad{background:#fdecea;color:#b3251f;border-color:rgba(179,37,31,.22)}
+.pill.warn{background:#fdf3e2;color:#9a6208;border-color:rgba(154,98,8,.22)}
+.pill.info{background:#e9f1fb;color:#235a97;border-color:rgba(35,90,151,.22)}
+.pill.mute{background:rgba(10,10,10,0.05);color:var(--ink-mute);border-color:rgba(10,10,10,.08)}
+.pill--plain::before{display:none}
+
+/* Data table */
+.dtable{width:100%;border-collapse:collapse;font-size:13px}
+.dtable th{text-align:left;font:600 10.5px var(--sans);text-transform:uppercase;letter-spacing:.8px;color:var(--ink-mute);padding:0 10px 10px;border-bottom:1px solid var(--hairline)}
+.dtable td{padding:11px 10px;border-bottom:1px solid var(--hairline);color:var(--ink-3)}
+.dtable tr:last-child td{border-bottom:0}
+.dtable td.num, .dtable th.num{text-align:right;font-variant-numeric:tabular-nums}
+
+/* Alert row */
+.alert-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 8px;border-bottom:1px solid var(--hairline)}
+.alert-row:last-child{border-bottom:0}
+.alert-row__main{font:500 13px var(--sans);color:var(--ink-2)}
+.alert-row__main b{color:var(--ink);font-weight:600}
+
+/* Hero (headline stat block) */
+.hero{background:var(--surface-2);border-radius:28px;padding:40px 44px;box-shadow:var(--shadow-card);margin-bottom:18px;background-image:radial-gradient(circle at 95% 5%,rgba(34,136,131,0.08),transparent 35%)}
+.hero__eyebrow{font:500 11px var(--sans);text-transform:uppercase;letter-spacing:2.2px;color:var(--ink-mute);margin-bottom:12px}
+.hero__value{font:600 56px/0.95 var(--display);color:var(--ink);letter-spacing:-1.5px;margin:0 0 8px}
+.hero__sub{font:400 15px var(--sans);color:var(--ink-4);margin:0 0 24px}
+.hero__stats{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;padding-top:22px;border-top:1px solid var(--hairline)}
+.hero__stat small{font:500 11px var(--sans);text-transform:uppercase;letter-spacing:1.4px;color:var(--ink-mute);display:block;margin-bottom:6px}
+.hero__stat b{font:600 26px var(--sans);color:var(--ink);letter-spacing:-.5px;font-variant-numeric:tabular-nums;display:block}
+.hero__stat em{font:400 12px var(--sans);font-style:normal;color:var(--ink-mute);margin-left:4px}
+.hero__stat b.good{color:var(--good)} .hero__stat b.bad{color:var(--bad)}
+@media (max-width:900px){.hero__stats{grid-template-columns:repeat(2,1fr)}}
+
+.empty{text-align:center;padding:30px;color:var(--ink-mute);font-size:13px}
+.skel{background:linear-gradient(90deg,rgba(10,10,10,0.04) 25%,rgba(10,10,10,0.08) 37%,rgba(10,10,10,0.04) 63%);background-size:400% 100%;animation:skel 1.4s ease infinite;border-radius:12px;height:80px}
+@keyframes skel{0%{background-position:100% 50%}100%{background-position:0 50%}}
+
+/* ---------------------------------------------------------------- Work queues
+   Added for the agronomist desk, matching the clinic desk's queue pattern:
+   a row is a piece of work with its state and the action that moves it on. */
+.queue{display:flex;flex-direction:column;max-height:560px;overflow-y:auto}
+.qrow{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:13px 10px;border-bottom:1px solid var(--hairline);border-radius:12px;transition:background .15s}
+.qrow:last-child{border-bottom:0}
+.qrow:hover{background:rgba(10,10,10,0.02)}
+.qrow__mark{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:600 11px var(--sans);background:rgba(10,10,10,0.05);color:var(--ink-3)}
+.qrow__name{font:600 13.5px var(--sans);color:var(--ink)}
+.qrow__meta{font-size:12px;color:var(--ink-mute);margin-top:2px}
+.qrow__right{display:flex;align-items:center;gap:8px}
+
+/* Step list: the build sequence for a programme, with what is still missing */
+.steps{display:flex;flex-direction:column;gap:2px}
+.step{display:grid;grid-template-columns:26px 1fr auto;gap:12px;align-items:center;padding:11px 8px;border-bottom:1px solid var(--hairline)}
+.step:last-child{border-bottom:0}
+.step__tick{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;background:rgba(10,10,10,0.06);color:var(--ink-faint);border:1px solid rgba(10,10,10,.08);transition:all .2s}
+.step__tick.on{background:#16a34a;color:#fff;border-color:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,.18)}
+.step__label{font:500 13.5px var(--sans);color:var(--ink-3)}
+/* Each sign-off is its own pill, styled exactly like .btn below, so
+   "Approved" reads as the same kind of control as the rest of the row
+   instead of a plain checkbox list. */
+.signoff{display:flex;gap:8px;flex-wrap:wrap}
+.signoff__item{position:relative;display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;
+  font:600 12.5px var(--sans);padding:9px 16px;cursor:pointer;background:rgba(10,10,10,0.05);color:var(--ink-3);
+  transition:all .18s;white-space:nowrap}
+.signoff__item:hover{background:rgba(10,10,10,0.10);color:var(--ink)}
+.signoff__item--on{background:var(--good-bg);color:var(--good)}
+.signoff__item input[type=checkbox]{position:absolute;width:0;height:0;opacity:0}
+.signoff__mark{width:16px;height:16px;border-radius:50%;flex:none;display:grid;place-items:center;
+  font-size:10px;font-weight:800;background:rgba(10,10,10,0.08);color:transparent;transition:all .18s}
+.signoff__item--on .signoff__mark{background:var(--good);color:#fff}
+.step__detail{font-size:12px;color:var(--ink-mute);margin-top:1px}
+
+/* Buttons used inside cards and queue rows */
+.btn{border:0;border-radius:999px;font:600 12.5px var(--sans);padding:9px 16px;cursor:pointer;background:rgba(10,10,10,0.05);color:var(--ink-3);transition:all .18s;white-space:nowrap}
+.btn:hover:not(:disabled){background:rgba(10,10,10,0.10);color:var(--ink);transform:translateY(-1px);box-shadow:0 4px 12px rgba(10,10,10,0.10)}
+.btn:active:not(:disabled){transform:translateY(0);box-shadow:0 1px 3px rgba(10,10,10,0.14)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn--ink{background:var(--grad-ink);color:#fafaf6}
+/* Re-asserted, not inherited: without the background here the rule above
+   turns a dark button pale and the white label disappears into it. */
+.btn--ink:hover:not(:disabled){background:var(--ink);color:#fff;transform:translateY(-2px);box-shadow:0 10px 24px -6px rgba(10,10,10,0.45)}
+.btn--ink:active:not(:disabled){transform:translateY(0);box-shadow:0 2px 6px rgba(10,10,10,0.3)}
+.btn--good{background:var(--good-bg);color:var(--good)}
+.btn--good:hover:not(:disabled){background:var(--good);color:#fff}
+.btn--bad{background:var(--bad-bg);color:var(--bad)}
+.btn--bad:hover:not(:disabled){background:var(--bad);color:#fff}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+
+/* Toast */
+.toastwrap{position:fixed;top:78px;right:28px;z-index:120;display:flex;flex-direction:column;gap:10px;align-items:flex-end;pointer-events:none}
+.toast{background:var(--ink);color:#fafaf6;font:500 13px var(--sans);padding:13px 18px;border-radius:14px;box-shadow:0 18px 40px -12px rgba(10,10,10,.45);max-width:360px;display:flex;align-items:flex-start;gap:10px;pointer-events:auto;animation:toastin .22s ease-out}
+.toast__ic{font-weight:800;flex:none;line-height:1.3}
+.toast--bad{background:#b3251f}
+.toast--good{background:#12762f}
+.toast--out{animation:toastout .3s ease-in forwards}
+@keyframes toastin{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+@keyframes toastout{to{opacity:0;transform:translateX(16px)}}
+
+/* Chosen / not chosen, at a glance */
+.mark{width:22px;height:22px;border-radius:50%;display:inline-grid;place-items:center;font-size:12px;font-weight:800;flex:none}
+.mark--yes{background:#16a34a;color:#fff;box-shadow:0 0 0 3px rgba(22,163,74,.18)}
+.mark--no{background:#dc2626;color:#fff;box-shadow:0 0 0 3px rgba(220,38,38,.16)}
+
+/* Inline empty state inside a card */
+.none{padding:22px 4px;color:var(--ink-mute);font-size:13px;text-align:center}
+
+/* -------------------------------------------------------------- Modals + forms
+   Carried across from the clinic desk so the two Upande desks behave the same:
+   a popup is where work is done, the page behind it stays put. */
+.modal-back{position:fixed;inset:0;background:rgba(10,10,10,0.45);backdrop-filter:blur(3px);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;animation:fadein .15s}
+.modal{background:var(--surface-2);border-radius:28px;width:100%;max-width:640px;box-shadow:0 40px 80px -20px rgba(10,10,10,0.35);display:flex;flex-direction:column}
+.modal--wide{max-width:960px}
+.modal--xl{max-width:1120px}
+.modal__head{padding:26px 32px 0;display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+.modal__head h2{margin:0;font:600 24px var(--display);color:var(--ink);letter-spacing:-.5px}
+.modal__head p{margin:4px 0 0;color:var(--ink-mute);font-size:13px}
+.modal__x{border:0;background:rgba(10,10,10,0.05);border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:18px;color:var(--ink-4);flex:none}
+.modal__x:hover{background:rgba(10,10,10,0.1)}
+.modal__body{padding:22px 32px}
+.modal__foot{padding:18px 32px 26px;display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;border-top:1px solid var(--hairline)}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;min-width:0}
+.field label{font:600 11px var(--sans);text-transform:uppercase;letter-spacing:1px;color:var(--ink-mute)}
+.field label .req{color:var(--bad)}
+.field small{font-size:11px;color:var(--ink-mute)}
+.field input,.field select,.field textarea{font:400 14px var(--sans);color:var(--ink);background:var(--surface);border:1px solid var(--hairline);border-radius:12px;padding:11px 14px;width:100%}
+.field textarea{resize:vertical;min-height:70px;line-height:1.5}
+.field input:focus,.field select:focus,.field textarea:focus{outline:0;border-color:var(--signal);box-shadow:0 0 0 3px rgba(34,136,131,0.15);background:#fff}
+.field input[type=checkbox]{width:18px;height:18px;padding:0;accent-color:var(--signal)}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+@media (max-width:620px){.fgrid{grid-template-columns:1fr}}
+
+/* Editable child-table rows inside a modal */
+.gridtbl{width:100%;border-collapse:collapse;font-size:13px}
+.gridtbl th{text-align:left;font:600 10px var(--sans);text-transform:uppercase;letter-spacing:1px;color:var(--ink-mute);padding:8px 6px;border-bottom:1px solid var(--hairline)}
+.gridtbl td{padding:5px 6px;border-bottom:1px solid var(--hairline);vertical-align:middle}
+.gridtbl input,.gridtbl select{font:400 13px var(--sans);border:1px solid var(--hairline);border-radius:9px;padding:7px 9px;width:100%;background:var(--surface)}
+.gridtbl .x{border:0;background:transparent;color:var(--ink-faint);cursor:pointer;font-size:16px;padding:2px 6px}
+.gridtbl .x:hover{color:var(--bad)}
+
+/* A tile that opens a popup — used for the master-data grid */
+.opengrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.opentile{display:flex;align-items:center;gap:12px;padding:16px 18px;border:1px solid var(--hairline);border-radius:16px;background:var(--surface-2);cursor:pointer;text-align:left;transition:all .18s;width:100%}
+.opentile:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+.opentile__ic{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:15px;flex:none}
+.opentile__lb{font:600 13.5px var(--sans);color:var(--ink)}
+.opentile__sub{font-size:11.5px;color:var(--ink-mute);margin-top:2px}
+
+/* A search box that sits inside a card, above its queue */
+.searchbox{font:400 13.5px var(--sans);color:var(--ink);background:var(--surface);border:1px solid var(--hairline);border-radius:999px;padding:10px 16px;width:100%;margin-bottom:12px}
+.searchbox:focus{outline:0;border-color:var(--signal);box-shadow:0 0 0 3px rgba(34,136,131,0.15);background:#fff}
+/* Five rows then scroll - a long list should not push the rest of the page away */
+.queue--5{max-height:330px}
+/* A thin progress lane used in rows and popups */
+.bar{height:8px;border-radius:999px;background:rgba(10,10,10,0.06);overflow:hidden;min-width:90px}
+.bar__fill{height:8px;border-radius:999px;background:var(--signal)}
+.bar__fill.good{background:var(--good)} .bar__fill.warn{background:var(--warn)} .bar__fill.bad{background:var(--bad)}
+.statline{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;margin:4px 0 10px}
+.statline__k{font-size:12px;color:var(--ink-mute)}
+.statline__v{font:600 13px var(--sans);color:var(--ink);font-variant-numeric:tabular-nums}
+.itempick{display:flex;gap:8px;align-items:center}
+.itempick__show{flex:1;cursor:default;background:var(--surface)}
+
+/* Chart.js with maintainAspectRatio:false needs an explicitly sized,
+   positioned parent - without one the canvas has nothing to measure itself
+   against and grows on every reflow, which is what made the month chart in
+   the programme popup run on for a full scroll's worth of page. */
+.chartbox{position:relative;width:100%;height:220px}
+.chartbox canvas{position:absolute;inset:0}
+
+/* Programme state pills carry a mark as well as a colour, so Draft and
+   Submitted differ for anyone who cannot tell amber from green. */
+.pill.good{background:#d9f2e2;color:#0d6b27;border-color:rgba(13,107,39,.35)}
+.pill.warn{background:#fdecc8;color:#8a5200;border-color:rgba(138,82,0,.32)}
+.pill--submitted::before{content:"\2713";width:auto;height:auto;background:none;font-size:11px;font-weight:800;line-height:1}
+.pill--draft::before{content:"\270E";width:auto;height:auto;background:none;font-size:11px;line-height:1}
+
+/* Presence: a dot on the avatar, so who is out there reads before any text */
+.qrow__mark{position:relative}
+.pdot{position:absolute;right:-3px;bottom:-3px;width:12px;height:12px;border-radius:50%;border:2px solid var(--surface-2);background:#b8b6ae}
+.pdot--online{background:#16a34a;animation:pdotpulse 1.8s ease-out infinite}
+.pdot--today{background:#2c6bb3}
+@keyframes pdotpulse{0%{box-shadow:0 0 0 0 rgba(22,163,74,.55)}70%{box-shadow:0 0 0 7px rgba(22,163,74,0)}100%{box-shadow:0 0 0 0 rgba(22,163,74,0)}}
+.tab-badge--live{background:#16a34a}
+.supstat{text-align:right;min-width:120px}
+.supstat__v{font:600 13px var(--sans);color:var(--ink)}
+.supstat__k{font-size:11.5px;color:var(--ink-mute);margin-top:2px}

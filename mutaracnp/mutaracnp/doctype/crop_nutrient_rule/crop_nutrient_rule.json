@@ -1,0 +1,82 @@
+{
+ "actions": [],
+ "creation": "2026-10-21 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_cnr",
+  "fertilizer_product",
+  "nutrient",
+  "rate_per_tonne",
+  "bag_weight_kg",
+  "product_nutrient_pct",
+  "apply_compost_netting",
+  "nutrient_source_group"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_cnr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "fertilizer_product",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Fertilizer Product",
+   "options": "Fertilizer Product",
+   "reqd": 1
+  },
+  {
+   "fieldname": "nutrient",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Nutrient",
+   "options": "N\nP\nK\nCa\nMg\nS\nMn\nB\nMo\nZn",
+   "reqd": 1
+  },
+  {
+   "fieldname": "rate_per_tonne",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Rate per Tonne"
+  },
+  {
+   "fieldname": "bag_weight_kg",
+   "fieldtype": "Float",
+   "label": "Bag Weight (Kg)"
+  },
+  {
+   "fieldname": "product_nutrient_pct",
+   "fieldtype": "Percent",
+   "label": "Product Nutrient %"
+  },
+  {
+   "default": "0",
+   "fieldname": "apply_compost_netting",
+   "fieldtype": "Check",
+   "label": "Apply Compost Netting"
+  },
+  {
+   "description": "Groups interchangeable product sources for the same nutrient, e.g. MOP+K2SO4 as alternate K sources.",
+   "fieldname": "nutrient_source_group",
+   "fieldtype": "Data",
+   "label": "Nutrient Source Group"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-10-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "MutaraCNP",
+ "name": "Crop Nutrient Rule",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manager Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/mutaracnp/css/dashboard.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  body{margin:0}
+  .chart-wrap canvas{max-height:260px}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar__brand">
+    <img class="topbar__logo" alt="Mutara" src="/assets/mutaracnp/images/upande-logo.png">
+    <div class="topbar__divider"></div>
+    <div class="topbar__product">MutaraCNP<small>Crop Nutrition Planning</small></div>
+  </div>
+  <div class="topbar__nav">
+    <a href="/dashboard">Agronomist</a>
+    <a href="/manager" class="on">Manager</a>
+  </div>
+  <div class="topbar__right">
+    <span>{{ frappe.session.user }}</span>
+    <div class="avatar" id="avatar">--</div>
+  </div>
+</div>
+
+<div class="page">
+  <div class="pagehead">
+    <div>
+      <div class="pagehead__eyebrow">MutaraCNP · Season Oversight</div>
+      <h1 class="pagehead__title">Manager Dashboard</h1>
+      <p class="pagehead__sub">Financial and operational performance across the season</p>
+    </div>
+    <div class="pagehead__tools">
+      <div class="selectpill"><select id="season-select" onchange="loadAll()"></select></div>
+      <button class="iconbtn" title="Refresh" onclick="loadAll()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab on" data-tab="overview">Overview</button>
+    <button class="tab" data-tab="financial">Financial</button>
+    <button class="tab" data-tab="performance">Performance</button>
+    <button class="tab" data-tab="attention">Needs Attention <span class="tab-badge" id="attn-badge" style="display:none;">0</span></button>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="tabpanel on" id="tab-overview">
+    <div class="hero" id="hero-block"><div class="skel" style="height:160px;"></div></div>
+    <div class="kpi-grid" id="kpi-strip"><div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+    <div class="card" id="section-progress"><div class="skel"></div></div>
+  </div>
+
+  <!-- FINANCIAL -->
+  <div class="tabpanel" id="tab-financial">
+    <div class="row-2-eq">
+      <div class="card"><div class="card__head"><h3>Budget vs Actual</h3></div><div id="budget-panel"><div class="skel"></div></div></div>
+      <div class="card"><div class="card__head"><h3>Cost per Hectare</h3></div><div id="cph-panel"><div class="skel"></div></div></div>
+    </div>
+    <div class="row-2-eq">
+      <div class="card"><div class="card__head"><h3>Fertilizer Kg — Planned vs Actual</h3></div><div id="qty-panel"><div class="skel"></div></div></div>
+      <div class="card chart-wrap"><div class="card__head"><h3>Usage by Section</h3></div><canvas id="section-chart" height="220"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card__head"><h3>Estimated Cost — Season Requirement × Item Price</h3></div>
+      <div id="computed-budget"><div class="skel"></div></div>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <div class="tabpanel" id="tab-performance">
+    <div class="row-2-eq">
+      <div class="card chart-wrap"><div class="card__head"><h3>Application Pace (Planned vs Applied)</h3></div><canvas id="pace-chart" height="220"></canvas></div>
+      <div class="card chart-wrap"><div class="card__head"><h3>Yield Tier Distribution</h3></div><canvas id="tier-chart" height="220"></canvas></div>
+    </div>
+    <div class="card"><div class="card__head"><h3>Operator Activity</h3></div><div id="operator-panel"><div class="skel"></div></div></div>
+  </div>
+
+  <!-- ATTENTION -->
+  <div class="tabpanel" id="tab-attention">
+    <div class="row-2-eq">
+      <div class="card"><div class="card__head"><h3>Overdue / Upcoming</h3></div><div id="attention-panel" style="max-height:320px;overflow-y:auto;"><div class="skel"></div></div></div>
+      <div class="card"><div class="card__head"><h3>Significant Variance</h3></div><div id="variance-panel" style="max-height:320px;overflow-y:auto;"><div class="skel"></div></div></div>
+    </div>
+    <div class="row-2-eq">
+      <div class="card"><div class="card__head"><h3>Partial / Incomplete Applications</h3></div><div id="partial-panel" style="max-height:320px;overflow-y:auto;"><div class="skel"></div></div></div>
+      <div class="card"><div class="card__head"><h3>Stock Coverage vs Need</h3></div><div id="coverage-panel"><div class="skel"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+// Item codes mean nothing to a manager reading this; the API sends the Item
+// name alongside every code. Prefer the name, fall back to the code.
+function productLabel(row, codeField) {
+    const code = row[codeField];
+    return row[codeField + "_name"] || row.product_name || code || "";
+}
+async function call(method, args) {
+    const res = await fetch("/api/method/mutaracnp.mutaracnp.api." + method, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        credentials: "same-origin", body: JSON.stringify(args || {}),
+    });
+    return (await res.json()).message;
+}
+
+let paceChart, tierChart, sectionChart;
+function season() { return document.getElementById("season-select").value; }
+
+document.querySelectorAll(".tab").forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab").forEach(b => b.classList.remove("on"));
+        document.querySelectorAll(".tabpanel").forEach(c => c.classList.remove("on"));
+        btn.classList.add("on");
+        document.getElementById("tab-" + btn.dataset.tab).classList.add("on");
+    });
+});
+
+(function setAvatar() {
+    const el = document.getElementById("avatar");
+    const user = "{{ frappe.session.user }}";
+    el.textContent = (user.split("@")[0].slice(0, 2) || "??").toUpperCase();
+})();
+
+async function loadFilters() {
+    // Mutara is a single farm, so there is no farm picker here - just the
+    // season, which still varies year to year.
+    const seasons = await call("get_seasons", {});
+    document.getElementById("season-select").innerHTML = seasons.map(s => `<option value="${s}">${s}</option>`).join("");
+    loadAll();
+}
+
+async function loadAll() {
+    loadKpis(); loadSectionProgress();
+    loadBudget(); loadCph(); loadQty(); loadSectionChart(); loadComputedBudget();
+    loadPace(); loadTiers(); loadOperators();
+    loadAttention(); loadVariance(); loadPartial(); loadCoverage();
+}
+
+async function loadKpis() {
+    const [k, p] = await Promise.all([
+        call("get_manager_kpis", { season: season() }),
+        call("get_farm_progress_overview", { season: season() }),
+    ]);
+    const varClass = k.variance > 0 ? "bad" : "good";
+    const varSign = k.variance > 0 ? "+" : "";
+
+    document.getElementById("hero-block").innerHTML = `
+        <div class="hero__eyebrow">Season Financial Position</div>
+        <div class="hero__value">Ksh ${k.total_actual.toLocaleString()}</div>
+        <p class="hero__sub">actual spend against Ksh ${k.total_budget != null ? k.total_budget.toLocaleString() : "—"} budgeted</p>
+        <div class="hero__stats">
+            <div class="hero__stat"><small>Cost / Hectare</small><b>Ksh ${k.cost_per_ha.toLocaleString()}</b></div>
+            <div class="hero__stat"><small>Blocks Completed</small><b class="${p.pct_complete >= 50 ? 'good' : ''}">${p.pct_complete}%</b></div>
+            <div class="hero__stat"><small>Total Blocks · Sections</small><b>${p.total_blocks} <em>/ ${p.total_sections}</em></b></div>
+            <div class="hero__stat"><small>Budget Variance</small><b class="${varClass}">${varSign}${k.variance_pct}%</b></div>
+        </div>
+    `;
+
+    document.getElementById("kpi-strip").innerHTML = `
+        <div class="kpi"><div class="kpi__label">Actual Spend</div><div class="kpi__value">Ksh ${(k.total_actual/1000).toFixed(0)}k</div></div>
+        <div class="kpi"><div class="kpi__label">Behind Schedule</div><div class="kpi__value ${p.counts['Behind Schedule'] > 0 ? 'bad':'good'}">${p.counts['Behind Schedule']}</div></div>
+        <div class="kpi"><div class="kpi__label">In Progress</div><div class="kpi__value info">${p.counts['In Progress'] || 0}</div></div>
+        <div class="kpi"><div class="kpi__label">Completed</div><div class="kpi__value good">${p.counts['Completed'] || 0}</div></div>
+    `;
+}
+
+const STATUS_COLOR = { "Completed": "var(--good)", "In Progress": "var(--info)", "Pending": "var(--warn)", "Behind Schedule": "var(--bad)" };
+
+async function loadSectionProgress() {
+    const data = await call("get_block_progress", { season: season() });
+    if (!data.length) { document.getElementById("section-progress").innerHTML = '<div class="empty">No blocks in this programme yet.</div>'; return; }
+    document.getElementById("section-progress").innerHTML = data.map((s, i) => `
+        <div class="sec-card" onclick="document.getElementById('mblocks-${i}').classList.toggle('open')">
+            <div class="sec-card__head"><b>${s.section}</b><span class="sec-card__pct">${s.pct_complete}%</span></div>
+            <div class="seg-bar">
+                ${Object.entries(s.counts).map(([k,v]) => v ? `<div class="seg" style="width:${v/s.total_blocks*100}%;background:${STATUS_COLOR[k]}" title="${k}: ${v}"></div>` : "").join("")}
+            </div>
+            <div class="seg-legend">
+                ${Object.entries(s.counts).map(([k,v]) => `<span><span class="dot" style="background:${STATUS_COLOR[k]}"></span>${k}: ${v}</span>`).join("")}
+                <span style="margin-left:auto;">▾ ${s.total_blocks} blocks — click to expand</span>
+            </div>
+            <div class="sec-blocks" id="mblocks-${i}">
+                ${s.blocks.map(b => `<span class="chip" style="background:${STATUS_COLOR[b.status]}">${b.block}</span>`).join("")}
+            </div>
+        </div>`).join("");
+}
+
+async function loadBudget() {
+    const b = await call("get_budget_summary", { season: season() });
+    const pct = Math.min(b.pct_spent, 100);
+    document.getElementById("budget-panel").innerHTML = `
+        <div class="kpi__value" style="margin-bottom:2px;">Ksh ${b.total_actual.toLocaleString()}</div>
+        <div class="kpi__unit" style="margin-bottom:14px;">of Ksh ${b.total_budget.toLocaleString()} budgeted</div>
+        <div class="bigbar"><div class="bigbar__fill" style="width:${pct}%;background:${b.pct_spent>100?'var(--bad)':'var(--grad-ink)'}">${b.pct_spent}%</div></div>
+    `;
+}
+
+async function loadCph() {
+    const b = await call("get_budget_summary", { season: season() });
+    document.getElementById("cph-panel").innerHTML = `
+        <div class="kpi__value" style="margin-bottom:2px;">Ksh ${b.cost_per_ha_actual.toLocaleString()}</div>
+        <div class="kpi__unit">actual per hectare · budgeted Ksh ${b.cost_per_ha_budget.toLocaleString()}</div>
+    `;
+}
+
+async function loadQty() {
+    const d = await call("get_qty_planned_vs_actual", { season: season() });
+    document.getElementById("qty-panel").innerHTML = `
+        <div class="kpi__value" style="margin-bottom:2px;">${d.actual_kg.toLocaleString()} Kg</div>
+        <div class="kpi__unit" style="margin-bottom:14px;">of ${d.planned_kg.toLocaleString()} Kg planned · ${d.remaining_kg.toLocaleString()} Kg remaining</div>
+        <div class="bigbar"><div class="bigbar__fill" style="width:${d.planned_kg? Math.min(d.actual_kg/d.planned_kg*100,100):0}%">${d.planned_kg? Math.round(d.actual_kg/d.planned_kg*100):0}%</div></div>
+    `;
+}
+
+async function loadSectionChart() {
+    const data = await call("get_section_usage_breakdown", { season: season() });
+    if (sectionChart) sectionChart.destroy();
+    sectionChart = new Chart(document.getElementById("section-chart"), {
+        type: "bar",
+        data: { labels: data.map(d => d.section.replace(/^.*-/, "")), datasets: [
+            { label: "Planned", data: data.map(d => d.planned_kg), backgroundColor: "rgba(10,10,10,0.12)", borderRadius: 4, maxBarThickness: 28 },
+            { label: "Actual", data: data.map(d => d.actual_kg), backgroundColor: "#228883", borderRadius: 4, maxBarThickness: 28 },
+        ]},
+        options: { plugins: { legend: { labels: { color: "#5a5a52", font: { family: "Poppins", size: 11 } } } },
+            scales: { x: { grid: { display: false }, ticks: { color: "#8a8780" } }, y: { grid: { color: "rgba(10,10,10,0.05)" }, ticks: { color: "#8a8780" }, beginAtZero: true } } }
+    });
+}
+
+async function loadComputedBudget() {
+    const d = await call("get_computed_budget", { season: season() });
+    if (!d.lines.length) { document.getElementById("computed-budget").innerHTML = '<div class="empty">No submitted programme to estimate from yet.</div>'; return; }
+    document.getElementById("computed-budget").innerHTML = `
+        <div class="kpi__value" style="margin-bottom:16px;">Ksh ${d.total_cost.toLocaleString()}<span class="kpi__unit" style="display:inline;margin-left:8px;">estimated season cost</span></div>
+        <table class="dtable">
+            <tr><th>Product</th><th class="num">Qty (Kg)</th><th class="num">Unit Price</th><th class="num">Cost (Ksh)</th></tr>
+            ${d.lines.map(l => `<tr><td>${l.product_name || l.product}</td><td class="num">${l.qty_kg.toLocaleString()}</td>
+                <td class="num">${l.unit_price.toLocaleString()}</td><td class="num">${l.cost.toLocaleString()}</td></tr>`).join("")}
+        </table>`;
+}
+
+async function loadPace() {
+    const d = await call("get_application_pace", { season: season() });
+    if (paceChart) paceChart.destroy();
+    paceChart = new Chart(document.getElementById("pace-chart"), {
+        type: "bar",
+        data: { labels: d.map(x => x.month), datasets: [
+            { label: "Planned", data: d.map(x => x.planned), backgroundColor: "rgba(10,10,10,0.12)", borderRadius: 4, maxBarThickness: 28 },
+            { label: "Applied", data: d.map(x => x.applied), backgroundColor: "#228883", borderRadius: 4, maxBarThickness: 28 },
+        ]},
+        options: { plugins: { legend: { labels: { color: "#5a5a52", font: { family: "Poppins", size: 11 } } } },
+            scales: { x: { grid: { display: false }, ticks: { color: "#8a8780" } }, y: { grid: { color: "rgba(10,10,10,0.05)" }, ticks: { color: "#8a8780" }, beginAtZero: true } } }
+    });
+}
+
+async function loadTiers() {
+    const d = await call("get_yield_tier_distribution", { season: season() });
+    if (tierChart) tierChart.destroy();
+    tierChart = new Chart(document.getElementById("tier-chart"), {
+        type: "bar",
+        data: { labels: d.map(x => x.tier), datasets: [{ data: d.map(x => x.count),
+            backgroundColor: ["#c4302b","#b9770e","#1a8a3a","#2c6bb3"], borderRadius: 4, maxBarThickness: 40 }] },
+        options: { plugins: { legend: { display: false } },
+            scales: { x: { grid: { display: false }, ticks: { color: "#8a8780" } }, y: { grid: { color: "rgba(10,10,10,0.05)" }, ticks: { color: "#8a8780" }, beginAtZero: true } } }
+    });
+}
+
+async function loadOperators() {
+    const data = await call("get_operator_activity", { season: season() });
+    if (!data.length) { document.getElementById("operator-panel").innerHTML = '<div class="empty">No applications recorded yet.</div>'; return; }
+    document.getElementById("operator-panel").innerHTML = `<table class="dtable">
+        <tr><th>Operator</th><th class="num">Applications</th><th class="num">Total Kg</th></tr>
+        ${data.map(o => `<tr><td>${o.supervisor}</td><td class="num">${o.applications}</td><td class="num">${o.total_kg.toLocaleString()}</td></tr>`).join("")}
+        </table>`;
+}
+
+async function loadCoverage() {
+    const data = await call("get_stock_coverage", { season: season() });
+    if (!data.length) { document.getElementById("coverage-panel").innerHTML = '<div class="empty">No data.</div>'; return; }
+    document.getElementById("coverage-panel").innerHTML = `<table class="dtable">
+        <tr><th>Product</th><th class="num">Need</th><th class="num">Stock</th><th>Status</th></tr>
+        ${data.map(d => `<tr><td>${d.product_name || d.product}</td><td class="num">${d.need.toLocaleString()}</td>
+            <td class="num">${d.stock.toLocaleString()}</td>
+            <td>${d.covered ? '<span class="pill good">Covered</span>'
+                : '<span class="pill bad">Short '+d.shortfall.toLocaleString()+'</span>'}</td></tr>`).join("")}
+    </table>`;
+    return data.filter(d => !d.covered).length;
+}
+
+async function loadAttention() {
+    const d = await call("get_upcoming_and_overdue", {});
+    const od = d.overdue || [], up = d.upcoming || [];
+    let html = "";
+    if (od.length) html += od.slice(0,6).map(o => `<div class="alert-row"><span class="alert-row__main">${o.block} · ${productLabel(o, "fertilizer_product")}</span><span class="pill bad">Overdue</span></div>`).join("");
+    if (up.length) html += up.slice(0,6).map(u => `<div class="alert-row"><span class="alert-row__main">${u.block} · ${productLabel(u, "fertilizer_product")}</span><span class="pill warn">${u.days}d</span></div>`).join("");
+    document.getElementById("attention-panel").innerHTML = html || '<div class="empty">All clear.</div>';
+    updateAttentionBadge(od.length + up.length);
+}
+
+let attnCounts = {};
+function updateAttentionBadge(n) {
+    attnCounts.overdue_upcoming = n;
+    renderBadge();
+}
+function renderBadge() {
+    const total = Object.values(attnCounts).reduce((a,b) => a+b, 0);
+    const badge = document.getElementById("attn-badge");
+    if (total > 0) { badge.style.display = "inline-block"; badge.textContent = total; }
+    else { badge.style.display = "none"; }
+}
+
+async function loadVariance() {
+    const data = await call("get_variance_alerts", { season: season() });
+    document.getElementById("variance-panel").innerHTML = data.length ? data.map(a => `
+        <div class="alert-row"><span class="alert-row__main">${a.block} · ${productLabel(a, "fertilizer_product")}</span>
+        <span class="pill bad">${a.variance_pct}%</span></div>`).join("")
+        : '<div class="empty">No significant deviations.</div>';
+    attnCounts.variance = data.length; renderBadge();
+}
+
+async function loadPartial() {
+    const data = await call("get_partial_applications", { season: season() });
+    document.getElementById("partial-panel").innerHTML = data.length ? data.map(a => `
+        <div class="alert-row"><span class="alert-row__main">${a.block} · ${productLabel(a, "fertilizer_product")}</span>
+        <span class="pill warn">Partial</span></div>`).join("")
+        : '<div class="empty">None.</div>';
+    attnCounts.partial = data.length; renderBadge();
+}
+
+window.addEventListener("load", () => setTimeout(loadFilters, 150));
+</script>
+</body>
+</html>

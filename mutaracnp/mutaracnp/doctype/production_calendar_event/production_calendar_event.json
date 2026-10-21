@@ -1,0 +1,68 @@
+{
+ "actions": [],
+ "creation": "2026-10-21 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_pce",
+  "event_type",
+  "start_month",
+  "end_month",
+  "description",
+  "fertilizer_interaction_notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_pce",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "event_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Event Type",
+   "options": "Flush\nFlowering\nFruit Development\nHarvest\nLeaf Sampling\nSoil Sampling\nGlobalGAP Audit\nRainforest Alliance Audit\nPest Control\nPollination\nFertilizer Application\nOther",
+   "reqd": 1
+  },
+  {
+   "fieldname": "start_month",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Start Month",
+   "options": "January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember"
+  },
+  {
+   "fieldname": "end_month",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "End Month",
+   "options": "January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "fertilizer_interaction_notes",
+   "fieldtype": "Small Text",
+   "label": "Fertilizer Interaction Notes"
+  }
+ ],
+ "istable": 1,
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-10-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "MutaraCNP",
+ "name": "Production Calendar Event",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

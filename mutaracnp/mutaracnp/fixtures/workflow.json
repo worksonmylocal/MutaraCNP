@@ -1,0 +1,57 @@
+[
+ {
+  "doctype": "Workflow",
+  "name": "Fertilizer Store Request Workflow",
+  "workflow_name": "Fertilizer Store Request Workflow",
+  "document_type": "Fertilizer Store Request",
+  "is_active": 1,
+  "workflow_state_field": "status",
+  "send_email_alert": 0,
+  "override_status": 0,
+  "states": [
+   {
+    "state": "Requested",
+    "doc_status": "0",
+    "allow_edit": "Field Worker"
+   },
+   {
+    "state": "Approved",
+    "doc_status": "0",
+    "allow_edit": "Storekeeper"
+   },
+   {
+    "state": "Issued",
+    "doc_status": "1",
+    "allow_edit": "Storekeeper"
+   },
+   {
+    "state": "Rejected",
+    "doc_status": "0",
+    "allow_edit": "Storekeeper"
+   }
+  ],
+  "transitions": [
+   {
+    "state": "Requested",
+    "action": "Approve",
+    "next_state": "Approved",
+    "allowed": "Farm Manager",
+    "allow_self_approval": 0
+   },
+   {
+    "state": "Requested",
+    "action": "Reject",
+    "next_state": "Rejected",
+    "allowed": "Farm Manager",
+    "allow_self_approval": 0
+   },
+   {
+    "state": "Approved",
+    "action": "Issue",
+    "next_state": "Issued",
+    "allowed": "Storekeeper",
+    "allow_self_approval": 1
+   }
+  ]
+ }
+]

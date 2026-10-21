@@ -1,0 +1,174 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:FB-{season}",
+ "creation": "2026-10-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "amended_from",
+  "fertilizer_programme",
+  "farm",
+  "company",
+  "season",
+  "column_break_fb1",
+  "total_budget_ksh",
+  "total_actual",
+  "total_variance_ksh",
+  "cost_per_ha_budget",
+  "cost_per_ha_actual",
+  "delivery_cost_budget",
+  "delivery_cost_actual",
+  "budget_lines"
+ ],
+ "fields": [
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Fertilizer Budget",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "fertilizer_programme",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Fertilizer Programme",
+   "options": "Fertilizer Programme",
+   "reqd": 1
+  },
+  {
+   "fieldname": "farm",
+   "fieldtype": "Link",
+   "label": "Farm",
+   "options": "CNP Farm",
+   "read_only": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "read_only": 1
+  },
+  {
+   "fieldname": "season",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Season"
+  },
+  {
+   "fieldname": "column_break_fb1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_budget_ksh",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Total Budget (KSh)"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total_actual",
+   "fieldtype": "Currency",
+   "label": "Total Actual (KSh)"
+  },
+  {
+   "fieldname": "total_variance_ksh",
+   "fieldtype": "Currency",
+   "label": "Total Variance (KSh)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cost_per_ha_budget",
+   "fieldtype": "Currency",
+   "label": "Cost per Ha (Budget)"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "cost_per_ha_actual",
+   "fieldtype": "Currency",
+   "label": "Cost per Ha (Actual)"
+  },
+  {
+   "fieldname": "delivery_cost_budget",
+   "fieldtype": "Currency",
+   "label": "Delivery Cost (Budget)"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "delivery_cost_actual",
+   "fieldtype": "Currency",
+   "label": "Delivery Cost (Actual)"
+  },
+  {
+   "fieldname": "budget_lines",
+   "fieldtype": "Table",
+   "options": "Fertilizer Budget Line"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-10-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "MutaraCNP",
+ "name": "Fertilizer Budget",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "CNP Agronomist",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Farm Manager",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "General Manager"
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

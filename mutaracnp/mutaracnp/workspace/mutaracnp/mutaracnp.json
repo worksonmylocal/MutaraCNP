@@ -1,0 +1,246 @@
+{
+ "charts": [],
+ "content": "[{\"id\": \"cnpNavBlock\", \"type\": \"custom_block\", \"data\": {\"custom_block_name\": \"MutaraCNP Navigation\", \"col\": 12}}]",
+ "creation": "2026-10-21 00:00:00.000000",
+ "custom_blocks": [
+  {
+   "custom_block_name": "MutaraCNP Navigation",
+   "doctype": "Workspace Custom Block",
+   "label": "MutaraCNP Navigation",
+   "parentfield": "custom_blocks",
+   "parenttype": "Workspace"
+  }
+ ],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "arrow-up-right",
+ "idx": 0,
+ "indicator_color": "",
+ "is_hidden": 0,
+ "label": "MutaraCNP",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Master Data",
+   "link_count": 0,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Farm Block",
+   "link_count": 0,
+   "link_to": "Farm Block",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Leaf Analysis",
+   "link_count": 0,
+   "link_to": "Leaf Analysis",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Production Calendar",
+   "link_count": 0,
+   "link_to": "Production Calendar",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Planning",
+   "link_count": 0,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Fertilizer Programme",
+   "link_count": 0,
+   "link_to": "Fertilizer Programme",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Block Fertilizer Plan",
+   "link_count": 0,
+   "link_to": "Block Fertilizer Plan",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Execution",
+   "link_count": 0,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Material Request",
+   "link_count": 0,
+   "link_to": "Material Request",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Fertilizer Application",
+   "link_count": 0,
+   "link_to": "Fertilizer Application",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Setup",
+   "link_count": 0,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "CNP Farm",
+   "link_count": 0,
+   "link_to": "CNP Farm",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Section",
+   "link_count": 0,
+   "link_to": "Section",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Crop",
+   "link_count": 0,
+   "link_to": "Crop",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-10-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "MutaraCNP",
+ "name": "MutaraCNP",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 15.0,
+ "shortcuts": [
+  {
+   "doc_view": "",
+   "label": "🌱 Agronomist Desk",
+   "type": "URL",
+   "url": "/agronomist"
+  },
+  {
+   "doc_view": "",
+   "label": "📊 Dashboard",
+   "type": "URL",
+   "url": "/dashboard"
+  },
+  {
+   "doc_view": "",
+   "label": "📱 Field Page",
+   "type": "URL",
+   "url": "/field"
+  },
+  {
+   "doc_view": "",
+   "label": "📈 Manager Dashboard",
+   "type": "URL",
+   "url": "/manager"
+  },
+  {
+   "doc_view": "List",
+   "label": "Fertilizer Programme",
+   "link_to": "Fertilizer Programme",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Fertilizer Budget (Estimated)",
+   "link_to": "Fertilizer Budget",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Material Request (Mine)",
+   "link_to": "Material Request",
+   "stats_filter": "{\"owner\": frappe.session.user}",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Fertilizer Application",
+   "link_to": "Fertilizer Application",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Block Fertilizer Plan",
+   "link_to": "Block Fertilizer Plan",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Farm Block",
+   "link_to": "Farm Block",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Leaf Analysis",
+   "link_to": "Leaf Analysis",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Production Calendar",
+   "link_to": "Production Calendar",
+   "type": "DocType"
+  }
+ ],
+ "title": "MutaraCNP",
+ "type": "Workspace"
+}

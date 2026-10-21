@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agronomist Desk · MutaraCNP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/mutaracnp/css/dashboard.css?v={{ asset_version }}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>body{margin:0}</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="btn" href="/app/mutaracnp?sidebar=CNP" style="margin-right:16px">&larr; Back to Desk</a>
+  <div class="topbar__brand">
+    <img class="topbar__logo" alt="Upande" src="/assets/mutaracnp/images/upande-logo.png">
+    <div class="topbar__divider"></div>
+    <div class="topbar__product">MutaraCNP<small>Crop Nutrition Planning</small></div>
+  </div>
+  <div class="topbar__nav">
+    <a href="/agronomist" class="on">Desk</a>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/manager">Manager</a>
+  </div>
+  <div class="topbar__right">
+    <span>{{ frappe.session.user }}</span>
+    <div class="avatar" id="avatar">--</div>
+  </div>
+</div>
+
+<div class="page">
+  <div class="pagehead">
+    <div>
+      <div class="pagehead__eyebrow">MutaraCNP · Farm Operations</div>
+      <h1 class="pagehead__title">Agronomist Desk</h1>
+      <p class="pagehead__sub">Build the season's programme, send it for approval, and follow the work it creates — without leaving this page.</p>
+    </div>
+    <div class="pagehead__tools">
+      <div class="selectpill"><select id="season"></select></div>
+      <button class="iconbtn" id="refresh" title="Refresh">&#8635;</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid" id="kpis">
+    <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+    <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab on" data-tab="programme">Programme</button>
+    <button class="tab" data-tab="plans">Plans</button>
+    <button class="tab" data-tab="requests">Store Requests</button>
+    <button class="tab" data-tab="applications">Applications</button>
+    <button class="tab" data-tab="stock">Stock</button>
+    <button class="tab" data-tab="supervisors">Supervisors <span class="tab-badge tab-badge--live" id="sup-badge" style="display:none"></span></button>
+    <button class="tab" data-tab="setup">Setup &amp; Master Data</button>
+  </div>
+
+  <div class="tabpanel on" id="tab-programme">
+    <div class="row-2">
+      <div class="card">
+        <div class="card__head"><h3>Current programme</h3>
+          <span class="meta" id="prog-meta"></span></div>
+        <div id="prog-body"><div class="skel"></div></div>
+      </div>
+      <div class="card">
+        <div class="card__head"><h3>Products this season</h3><span class="meta" id="prod-meta"></span></div>
+        <div id="prod-body"><div class="skel"></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card__head"><h3>All programmes</h3>
+        <button class="btn btn--ink" data-new="programme">New programme</button></div>
+      <div class="queue" id="prog-list"><div class="skel"></div></div>
+    </div>
+  </div>
+
+  <div class="tabpanel" id="tab-plans">
+    <div class="card">
+      <div class="card__head"><h3>All blocks</h3><span class="meta" id="blocks-meta"></span></div>
+      <input class="searchbox" id="block-search" placeholder="Search a block or section…">
+      <div class="queue" id="blocks"><div class="skel"></div></div>
+    </div>
+    <div class="card">
+      <div class="card__head"><h3>Blocks with work due</h3><span class="meta" id="plans-meta"></span></div>
+      <div class="queue" id="plans"><div class="skel"></div></div>
+    </div>
+  </div>
+
+  <div class="tabpanel" id="tab-requests">
+    <div class="card">
+      <div class="card__head"><h3>Store requests</h3><span class="meta" id="req-meta"></span></div>
+      <div class="queue" id="requests"><div class="skel"></div></div>
+    </div>
+  </div>
+
+  <div class="tabpanel" id="tab-applications">
+    <div class="card">
+      <div class="card__head"><h3>Recorded applications</h3><span class="meta" id="apps-meta"></span></div>
+      <div class="queue queue--5" id="apps"><div class="skel"></div></div>
+    </div>
+    <div class="card">
+      <div class="card__head"><h3>Planned against applied, by section</h3>
+        <span class="meta">Open a section for its blocks</span></div>
+      <div id="variance"><div class="skel"></div></div>
+    </div>
+  </div>
+
+  <div class="tabpanel" id="tab-setup">
+    <div class="card">
+      <div class="card__head"><h3>Everything the engine reads</h3>
+        <span class="meta">Opens here — no need for the doctype forms</span></div>
+      <div class="opengrid" id="setup-grid"></div>
+    </div>
+  </div>
+
+  <div class="tabpanel" id="tab-supervisors">
+    <div class="kpi-grid" id="sup-kpis"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+    <div class="card">
+      <div class="card__head"><h3>Supervisors in the field</h3>
+        <span class="meta" id="sup-meta">Refreshes every 30 seconds</span></div>
+      <div class="queue" id="sup-list"><div class="skel"></div></div>
+      <div class="none" style="text-align:left;padding-top:14px">
+        Online means a request in the last 15 minutes. The app signs in with a token rather
+        than a session, so a supervisor reading a screen without touching anything goes quiet.</div>
+    </div>
+  </div>
+
+  <div class="tabpanel" id="tab-stock">
+    <div class="card">
+      <div class="card__head"><h3>Cover against the season's requirement</h3></div>
+      <div id="stock"><div class="skel"></div></div>
+    </div>
+  </div>
+</div>
+
+<script>window.CNP = { csrf: {{ csrf_token | tojson }}, user: {{ frappe.session.user | tojson }} };</script>
+<script src="/assets/mutaracnp/js/agronomist.js?v={{ asset_version }}"></script>
+</body>
+</html>

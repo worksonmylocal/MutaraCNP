@@ -1,0 +1,70 @@
+{
+ "actions": [],
+ "creation": "2026-10-21 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_cyt",
+  "tier_label",
+  "tier_tonnage",
+  "min_yield_kg_ha",
+  "max_yield_kg_ha",
+  "sort_order"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_cyt",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "tier_label",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Tier Label",
+   "reqd": 1
+  },
+  {
+   "description": "Nominal tonnage used in rate_per_tonne × tier_tonnage math. Kept separate from the label since it's not always parseable from it.",
+   "fieldname": "tier_tonnage",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Tier Tonnage",
+   "reqd": 1
+  },
+  {
+   "description": "Leave blank for the lowest tier (unbounded below).",
+   "fieldname": "min_yield_kg_ha",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Min Yield (Kg/Ha, exclusive)"
+  },
+  {
+   "description": "Leave blank for the highest tier (unbounded above).",
+   "fieldname": "max_yield_kg_ha",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Max Yield (Kg/Ha, inclusive)"
+  },
+  {
+   "fieldname": "sort_order",
+   "fieldtype": "Int",
+   "label": "Sort Order"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-10-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "MutaraCNP",
+ "name": "Crop Yield Tier",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

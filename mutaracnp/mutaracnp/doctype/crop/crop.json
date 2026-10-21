@@ -1,0 +1,142 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:crop_name",
+ "creation": "2026-10-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_crop",
+  "crop_name",
+  "item",
+  "is_primary_crop",
+  "column_break_crop_compost",
+  "compost_dose_kg",
+  "compost_n_pct",
+  "leaf_adjustment_pct",
+  "section_break_yield_tiers",
+  "yield_tiers",
+  "section_break_nutrient_rules",
+  "nutrient_rules"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_crop",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "crop_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Crop Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "description": "The post-production/harvested-produce Item this crop yields, e.g. Hass Avocado -> Item 'Avocado'.",
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "Item",
+   "unique": 1
+  },
+  {
+   "default": "0",
+   "description": "The crop Mutara is actively planning fertilizer programmes for right now (Avocado). Other crops stay as master data for when they're brought online.",
+   "fieldname": "is_primary_crop",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Primary Crop"
+  },
+  {
+   "fieldname": "column_break_crop_compost",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Flat compost application used to net off the Nitrogen requirement.",
+   "fieldname": "compost_dose_kg",
+   "fieldtype": "Float",
+   "label": "Compost Dose (Kg)"
+  },
+  {
+   "fieldname": "compost_n_pct",
+   "fieldtype": "Percent",
+   "label": "Compost Nitrogen %"
+  },
+  {
+   "default": "10",
+   "description": "Flat adjustment applied when a leaf result is below a nutrient's midpoint (+) or above its high norm (-).",
+   "fieldname": "leaf_adjustment_pct",
+   "fieldtype": "Percent",
+   "label": "Leaf Analysis Adjustment %"
+  },
+  {
+   "fieldname": "section_break_yield_tiers",
+   "fieldtype": "Section Break",
+   "label": "Yield Tiers"
+  },
+  {
+   "fieldname": "yield_tiers",
+   "fieldtype": "Table",
+   "options": "Crop Yield Tier"
+  },
+  {
+   "fieldname": "section_break_nutrient_rules",
+   "fieldtype": "Section Break",
+   "label": "Nutrient Rules"
+  },
+  {
+   "fieldname": "nutrient_rules",
+   "fieldtype": "Table",
+   "options": "Crop Nutrient Rule"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-10-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "MutaraCNP",
+ "name": "Crop",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "CNP Agronomist",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "General Manager",
+   "share": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "crop_name"
+}

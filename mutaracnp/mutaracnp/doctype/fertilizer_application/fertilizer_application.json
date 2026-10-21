@@ -1,0 +1,264 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:FA-{#####}",
+ "creation": "2026-10-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "amended_from",
+  "block",
+  "block_fertilizer_plan",
+  "application_date",
+  "column_break_fap1",
+  "fertilizer_product",
+  "planned_quantity_kg",
+  "actual_quantity_applied_kg",
+  "variance_kg",
+  "applied_in_full",
+  "partial_reason",
+  "section_break_fap_method",
+  "application_method",
+  "weather_conditions",
+  "section_break_fap_team",
+  "supervisor",
+  "supervisor_name",
+  "supervisor_number",
+  "applicators",
+  "section_break_fap_links",
+  "material_request",
+  "stock_entry",
+  "notes",
+  "farm",
+  "company"
+ ],
+ "fields": [
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Fertilizer Application",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "block",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Block",
+   "options": "Farm Block",
+   "reqd": 1
+  },
+  {
+   "fieldname": "block_fertilizer_plan",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Block Fertilizer Plan",
+   "options": "Block Fertilizer Plan"
+  },
+  {
+   "fieldname": "application_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Application Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_fap1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fertilizer_product",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Fertilizer Item",
+   "options": "Item",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "block_fertilizer_plan.total_kg_required",
+   "fieldname": "planned_quantity_kg",
+   "fieldtype": "Float",
+   "label": "Planned Quantity (Kg)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "actual_quantity_applied_kg",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Actual Quantity Applied (Kg)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "variance_kg",
+   "fieldtype": "Float",
+   "label": "Variance (Kg)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "applied_in_full",
+   "fieldtype": "Check",
+   "label": "Applied in Full",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:!doc.applied_in_full",
+   "fieldname": "partial_reason",
+   "fieldtype": "Small Text",
+   "label": "Partial Application Reason"
+  },
+  {
+   "fieldname": "section_break_fap_method",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "application_method",
+   "fieldtype": "Select",
+   "label": "Application Method",
+   "options": "Broadcast\nBranding\nDrip Fertigation\nFoliar Spray\nOther"
+  },
+  {
+   "fieldname": "weather_conditions",
+   "fieldtype": "Data",
+   "label": "Weather Conditions"
+  },
+  {
+   "fieldname": "section_break_fap_team",
+   "fieldtype": "Section Break",
+   "label": "Team"
+  },
+  {
+   "fieldname": "supervisor",
+   "fieldtype": "Link",
+   "label": "Supervisor",
+   "options": "Employee"
+  },
+  {
+   "fetch_from": "supervisor.employee_name",
+   "fieldname": "supervisor_name",
+   "fieldtype": "Data",
+   "label": "Supervisor Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "supervisor.employee_number",
+   "fieldname": "supervisor_number",
+   "fieldtype": "Data",
+   "label": "Supervisor Number",
+   "read_only": 1
+  },
+  {
+   "fieldname": "applicators",
+   "fieldtype": "Table",
+   "options": "Fertilizer Application Applicator"
+  },
+  {
+   "fieldname": "section_break_fap_links",
+   "fieldtype": "Section Break",
+   "label": "Stock Links"
+  },
+  {
+   "fieldname": "material_request",
+   "fieldtype": "Link",
+   "label": "Material Request",
+   "options": "Material Request"
+  },
+  {
+   "fieldname": "stock_entry",
+   "fieldtype": "Link",
+   "label": "Stock Entry",
+   "options": "Stock Entry"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "farm",
+   "fieldtype": "Link",
+   "label": "Farm",
+   "options": "CNP Farm",
+   "read_only": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-10-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "MutaraCNP",
+ "name": "Fertilizer Application",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "CNP Agronomist",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Field Worker",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Farm Manager"
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "General Manager"
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

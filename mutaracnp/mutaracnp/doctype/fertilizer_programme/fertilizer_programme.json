@@ -1,0 +1,246 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:FP-{season}-{####}",
+ "creation": "2026-10-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "amended_from",
+  "section_break_fp_head",
+  "season",
+  "farm",
+  "scope_type",
+  "scope_section",
+  "scope_block",
+  "column_break_fp_head",
+  "company",
+  "crop",
+  "production_calendar",
+  "period_type",
+  "start_month",
+  "end_month",
+  "section_break_fp_yield",
+  "block_yield_data",
+  "section_break_fp_lines",
+  "programme_lines",
+  "section_break_fp_products",
+  "product_selections",
+  "section_break_fp_approval",
+  "approved_by_agronomist",
+  "approved_by_manager"
+ ],
+ "fields": [
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Fertilizer Programme",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_fp_head",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "season",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Season",
+   "reqd": 1
+  },
+  {
+   "fieldname": "farm",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Farm",
+   "options": "CNP Farm",
+   "reqd": 1
+  },
+  {
+   "default": "Entire Farm",
+   "fieldname": "scope_type",
+   "fieldtype": "Select",
+   "label": "Scope Type",
+   "options": "Entire Farm\nSection\nBlock"
+  },
+  {
+   "depends_on": "eval:doc.scope_type=='Section'",
+   "fieldname": "scope_section",
+   "fieldtype": "Link",
+   "label": "Scope Section",
+   "options": "Section"
+  },
+  {
+   "depends_on": "eval:doc.scope_type=='Block'",
+   "fieldname": "scope_block",
+   "fieldtype": "Link",
+   "label": "Scope Block",
+   "options": "Farm Block"
+  },
+  {
+   "fieldname": "column_break_fp_head",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "read_only": 1
+  },
+  {
+   "fieldname": "crop",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Crop",
+   "options": "Crop",
+   "reqd": 1
+  },
+  {
+   "fieldname": "production_calendar",
+   "fieldtype": "Link",
+   "label": "Production Calendar",
+   "options": "Production Calendar"
+  },
+  {
+   "default": "Full Year",
+   "fieldname": "period_type",
+   "fieldtype": "Select",
+   "label": "Period Type",
+   "options": "Full Year\nCustom Period"
+  },
+  {
+   "depends_on": "eval:doc.period_type=='Custom Period'",
+   "fieldname": "start_month",
+   "fieldtype": "Select",
+   "label": "Start Month",
+   "options": "January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember"
+  },
+  {
+   "depends_on": "eval:doc.period_type=='Custom Period'",
+   "fieldname": "end_month",
+   "fieldtype": "Select",
+   "label": "End Month",
+   "options": "January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember"
+  },
+  {
+   "fieldname": "section_break_fp_yield",
+   "fieldtype": "Section Break",
+   "label": "Block Yield Data"
+  },
+  {
+   "fieldname": "block_yield_data",
+   "fieldtype": "Table",
+   "options": "Programme Block Yield"
+  },
+  {
+   "fieldname": "section_break_fp_lines",
+   "fieldtype": "Section Break",
+   "label": "Programme Lines"
+  },
+  {
+   "fieldname": "programme_lines",
+   "fieldtype": "Table",
+   "options": "Fertilizer Programme Line"
+  },
+  {
+   "fieldname": "section_break_fp_products",
+   "fieldtype": "Section Break",
+   "label": "Product Selections"
+  },
+  {
+   "fieldname": "product_selections",
+   "fieldtype": "Table",
+   "options": "Fertilizer Programme Product"
+  },
+  {
+   "fieldname": "section_break_fp_approval",
+   "fieldtype": "Section Break",
+   "label": "Approval"
+  },
+  {
+   "fieldname": "approved_by_agronomist",
+   "fieldtype": "Check",
+   "label": "Approved by Agronomist",
+   "read_only": 1
+  },
+  {
+   "fieldname": "approved_by_manager",
+   "fieldtype": "Check",
+   "label": "Approved by Farm Manager",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-10-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "MutaraCNP",
+ "name": "Fertilizer Programme",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "CNP Agronomist",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Farm Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "General Manager",
+   "share": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "season"
+}

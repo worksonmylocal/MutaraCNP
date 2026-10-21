@@ -1,0 +1,90 @@
+{
+ "actions": [],
+ "creation": "2026-10-21 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_fpl",
+  "block",
+  "section",
+  "fertilizer_product",
+  "application_month",
+  "yield_tier",
+  "kg_per_ha_rate",
+  "total_kg",
+  "dose_per_tree_g"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_fpl",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "block",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Block",
+   "options": "Farm Block"
+  },
+  {
+   "fieldname": "section",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Section"
+  },
+  {
+   "fieldname": "fertilizer_product",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Fertilizer Item",
+   "options": "Item"
+  },
+  {
+   "fieldname": "application_month",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Application Month",
+   "options": "January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember"
+  },
+  {
+   "description": "Free text so it isn't locked to one crop's tier labels — validated against the crop's own Crop Yield Tier rows once the calculation engine lands.",
+   "fieldname": "yield_tier",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Yield Tier"
+  },
+  {
+   "fieldname": "kg_per_ha_rate",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Kg/Ha Rate"
+  },
+  {
+   "fieldname": "total_kg",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Total Kg"
+  },
+  {
+   "fieldname": "dose_per_tree_g",
+   "fieldtype": "Float",
+   "label": "Dose per Tree (g)"
+  }
+ ],
+ "istable": 1,
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-10-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "MutaraCNP",
+ "name": "Fertilizer Programme Line",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

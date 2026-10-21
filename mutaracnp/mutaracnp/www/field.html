@@ -1,0 +1,1247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Field Fertilizer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/mutaracnp/css/dashboard.css">
+<style>
+    body{background:var(--bg);margin:0}
+    .field-app{max-width:480px;margin:0 auto;padding:16px 16px 40px}
+    .field-header{display:flex;align-items:center;gap:12px;padding:12px 4px;margin-bottom:8px}
+    .field-header img{height:26px}
+    .field-header h1{font:600 17px var(--sans);color:var(--ink);margin:0;letter-spacing:-.2px}
+    .field-header p{margin:0;font-size:12px;color:var(--ink-mute)}
+    .sync-badge{margin-left:auto}
+    .hamburger{width:40px;height:40px;border:0;background:var(--surface-2);border-radius:50%;
+        display:grid;place-items:center;cursor:pointer;box-shadow:var(--shadow-card);flex-shrink:0}
+    .hamburger svg{stroke:var(--ink)}
+    .homebtn{width:36px;height:36px;border:0;background:var(--surface-2);border-radius:50%;
+        display:grid;place-items:center;cursor:pointer;box-shadow:var(--shadow-card);
+        flex-shrink:0;color:var(--ink-3);margin-left:8px}
+    .homebtn:active{transform:scale(0.92)}
+
+    .card{padding:18px 20px}
+    .card h3{margin:0 0 4px;font:600 16px var(--sans);color:var(--ink)}
+    .card .meta{font-size:12px;color:var(--ink-mute);margin-bottom:12px}
+    .btn-big{display:block;width:100%;padding:16px;font:600 15px var(--sans);border:none;border-radius:14px;cursor:pointer;margin-top:8px;transition:transform .1s}
+    .btn-big:active{transform:scale(0.98)}
+    .btn-big:disabled{opacity:.5;cursor:not-allowed}
+    .btn-ink{background:var(--grad-ink);color:#fafaf6}
+    .btn-signal{background:var(--signal);color:#fafaf6}
+    .btn-warn{background:var(--warn);color:#fafaf6}
+    .btn-good{background:var(--good);color:#fafaf6}
+    .btn-bad{background:var(--bad);color:#fafaf6}
+    .btn-grey{background:rgba(10,10,10,0.06);color:var(--ink-3)}
+
+    .field-input{width:100%;padding:14px 16px;font-size:16px;border:1px solid var(--hairline);
+        background:var(--surface-2);border-radius:12px;margin:8px 0;box-sizing:border-box;color:var(--ink)}
+    .toggle-row{display:flex;align-items:center;gap:10px;margin:14px 0}
+    .toggle-row input{width:22px;height:22px}
+    .toggle-row label{font-size:14px;color:var(--ink-3)}
+    .back-link{color:var(--ink-4);font:600 13px var(--sans);cursor:pointer;display:inline-block;margin-bottom:14px}
+    .back-link:hover{color:var(--ink)}
+    .empty{text-align:center;color:var(--ink-mute);padding:34px 0;font-size:13px}
+    .spinner{text-align:center;padding:34px 0;color:var(--ink-mute);font-size:13px}
+
+    .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+        background:var(--ink);color:#fafaf6;padding:13px 22px;border-radius:12px;
+        font:500 14px var(--sans);z-index:999;opacity:0;transition:opacity .3s;max-width:90%;text-align:center}
+    .toast.show{opacity:1}
+
+    /* Side panel */
+    .overlay{position:fixed;inset:0;background:rgba(10,10,10,0.4);z-index:99998;opacity:0;pointer-events:none;transition:opacity .2s}
+    .overlay.open{opacity:1;pointer-events:auto}
+    .drawer{position:fixed;top:0;left:0;bottom:0;width:280px;background:var(--surface-2);z-index:99999;
+        transform:translateX(-100%);transition:transform .25s;padding:24px 16px;
+        border-radius:0 24px 24px 0;box-shadow:var(--shadow-hover);display:flex;flex-direction:column}
+    .drawer.open{transform:translateX(0)}
+    .drawer__brand{display:flex;align-items:center;gap:10px;padding:8px 8px 20px}
+    .drawer__brand img{height:24px}
+    .drawer__brand span{font:600 14px var(--sans);color:var(--ink)}
+    .drawer__nav{display:flex;flex-direction:column;gap:4px}
+    .drawer__item{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:14px;
+        font:600 14px var(--sans);color:var(--ink-3);cursor:pointer;border:0;background:transparent;text-align:left;width:100%}
+    .drawer__item:hover{background:rgba(10,10,10,0.04)}
+    .drawer__item.on{background:var(--grad-ink);color:#fafaf6}
+    .drawer__footer{margin-top:auto;padding:12px 8px;font-size:11px;color:var(--ink-mute)}
+
+    /* Home */
+    .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+    .stat-card{background:var(--surface-2);border-radius:20px;padding:20px;box-shadow:var(--shadow-card)}
+    .stat-card__label{font:500 11px var(--sans);text-transform:uppercase;letter-spacing:1px;color:var(--ink-mute);margin-bottom:8px}
+    .stat-card__value{font:600 32px var(--sans);color:var(--ink);letter-spacing:-1px}
+    .greeting{font:600 20px var(--sans);color:var(--ink);margin:4px 0 2px}
+    .greeting-sub{font-size:13px;color:var(--ink-mute);margin-bottom:20px}
+    .quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+    .quick-actions .btn-big{margin-top:0}
+
+    /* Sections & rows */
+    .section-group{margin-bottom:14px}
+    .section-group__head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;
+        background:var(--surface-2);border-radius:16px;box-shadow:var(--shadow-card);cursor:pointer}
+    .section-group__head b{font:600 14px var(--sans);color:var(--ink)}
+    .section-group__head .count{font-size:12px;color:var(--ink-mute);margin-top:2px}
+    .section-group__head .chevron{color:var(--ink-mute);font-size:20px;transition:transform .2s;flex-shrink:0}
+    .section-group__body{padding:10px 0 0}
+    .block-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;
+        background:var(--surface-2);border-radius:14px;margin-bottom:8px;box-shadow:var(--shadow-card);cursor:pointer}
+    .block-row .name{font:600 13px var(--sans);color:var(--ink)}
+    .section-row{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;
+        background:var(--surface-2);border-radius:16px;margin-bottom:10px;box-shadow:var(--shadow-card);cursor:pointer}
+    .section-row .name{font:600 14px var(--sans);color:var(--ink)}
+    .section-row .count{font-size:12px;color:var(--ink-mute);margin-top:2px}
+    .section-row .arrow{color:var(--ink-mute)}
+
+    .request-row{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:14px 16px;
+        background:var(--surface-2);border-radius:14px;margin-bottom:8px;box-shadow:var(--shadow-card)}
+    .request-row .name{font:600 13px var(--sans);color:var(--ink)}
+    .request-row .meta{margin:2px 0 0;font-size:11px;color:var(--ink-mute)}
+
+    .pick-row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:14px;
+        background:var(--surface-2);box-shadow:var(--shadow-card);margin-bottom:10px;cursor:pointer}
+    .pick-row.selected{outline:2px solid var(--ink)}
+    .pick-row .initial{width:36px;height:36px;border-radius:50%;background:var(--grad-ink);color:#fafaf6;
+        display:grid;place-items:center;font:600 13px var(--sans);flex-shrink:0}
+    .pick-row .name{font:600 14px var(--sans);color:var(--ink);flex:1}
+    .pick-row .check{width:22px;height:22px;border-radius:50%;border:2px solid var(--hairline);flex-shrink:0}
+    .pick-row.selected .check{background:var(--good);border-color:var(--good)}
+
+    .roster-row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:14px;
+        background:var(--surface-2);box-shadow:var(--shadow-card);margin-bottom:10px}
+    .roster-row .initial{width:36px;height:36px;border-radius:50%;background:var(--grad-ink);color:#fafaf6;
+        display:grid;place-items:center;font:600 13px var(--sans);flex-shrink:0;cursor:pointer}
+    .roster-row .info{flex:1;cursor:pointer}
+    .roster-row .name{font:600 14px var(--sans);color:var(--ink)}
+    .roster-row .block-tag{font-size:11px;color:var(--ink-mute);margin-top:2px}
+    .roster-row .att-btns{display:flex;gap:6px}
+    .roster-row .att-btn{border:0;border-radius:8px;padding:8px 10px;font:600 11px var(--sans);cursor:pointer}
+
+    .filter-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 12px}
+    .filter-select{margin:0;padding:12px 14px;font-size:14px;appearance:none;
+        background-image:linear-gradient(45deg,transparent 50%,var(--ink-mute) 50%),linear-gradient(135deg,var(--ink-mute) 50%,transparent 50%);
+        background-position:calc(100% - 18px) calc(50% + 2px),calc(100% - 13px) calc(50% + 2px);
+        background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+    .block-subhead{display:flex;align-items:center;justify-content:space-between;padding:10px 4px 6px;margin-top:4px}
+    .block-subhead span{font:600 12px var(--sans);color:var(--ink-4);text-transform:uppercase;letter-spacing:.4px}
+    .add-chip{width:26px;height:26px;border:0;border-radius:50%;background:var(--grad-ink);color:#fafaf6;
+        font:600 15px var(--sans);cursor:pointer;display:grid;place-items:center;line-height:1;padding:0;flex-shrink:0}
+    .add-chip:active{transform:scale(0.9)}
+
+    /* Bottom quick bar */
+    .bnav{position:fixed;left:0;right:0;bottom:0;z-index:99997;display:flex;
+        background:var(--surface-2);border-top:1px solid var(--hairline);
+        box-shadow:0 -4px 18px rgba(10,10,10,0.06);
+        padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+    .bnav__item{flex:1;border:0;background:transparent;cursor:pointer;
+        display:flex;flex-direction:column;align-items:center;gap:3px;
+        padding:7px 2px;border-radius:12px;color:var(--ink-mute);
+        font:600 10px var(--sans);letter-spacing:.2px}
+    .bnav__item svg{width:20px;height:20px}
+    .bnav__item.on{color:var(--ink);background:rgba(10,10,10,0.05)}
+    .bnav__item:active{transform:scale(0.94)}
+
+    /* Bigger targets for gloved hands - opt-in from Settings */
+    body.big-touch .btn-big{padding:20px;font-size:16px}
+    body.big-touch .att-btn{padding:12px 16px;font-size:13px}
+    body.big-touch .pick-row,body.big-touch .roster-row{padding:18px 16px}
+    body.big-touch .bnav__item{padding:11px 2px}
+    body.big-touch .bnav__item svg{width:23px;height:23px}
+</style>
+</head>
+<body>
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+    <div class="drawer__brand">
+        <img src="/assets/mutaracnp/images/upande-logo.png" alt="Upande">
+        <span>MutaraCNP Field</span>
+    </div>
+    <div class="drawer__nav">
+        <button class="drawer__item" data-nav="home" onclick="navigate('home')">🏠&nbsp; Home</button>
+        <button class="drawer__item" data-nav="blocks" onclick="navigate('blocks')">🧱&nbsp; All Blocks</button>
+        <button class="drawer__item" data-nav="upcoming" onclick="navigate('upcoming')">⏳&nbsp; Upcoming Applications</button>
+        <button class="drawer__item" data-nav="store-requests" onclick="navigate('store-requests')">📦&nbsp; Store Requests</button>
+        <button class="drawer__item" data-nav="team" onclick="navigate('team')">👷&nbsp; Manage Team</button>
+        <button class="drawer__item" data-nav="attendance" onclick="navigate('attendance')">🗓️&nbsp; Attendance</button>
+        <button class="drawer__item" data-nav="record-section" onclick="navigate('record-section')">📝&nbsp; Record Application</button>
+        <button class="drawer__item" data-nav="correction" onclick="navigate('correction')">🛠️&nbsp; Correction</button>
+        <button class="drawer__item" data-nav="settings" onclick="navigate('settings')">⚙️&nbsp; Settings</button>
+    </div>
+    <div class="drawer__footer">Signed in as {{ frappe.session.user }}</div>
+</div>
+
+<div class="field-app">
+    <div class="field-header">
+        <button class="hamburger" onclick="openDrawer()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div>
+            <h1>Field Fertilizer</h1>
+            <p id="header-sub">Home</p>
+        </div>
+        <span class="pill warn sync-badge" id="sync-badge" style="display:none;"></span>
+        <button class="homebtn" id="home-btn" style="display:none;" onclick="navigate('home')" title="Back to home" aria-label="Back to home">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>
+        </button>
+    </div>
+
+    <!-- HOME -->
+    <div id="view-home">
+        <div class="greeting" id="home-greeting">Hello</div>
+        <div class="greeting-sub">Here's what's happening today.</div>
+        <div class="card" style="margin-bottom:14px;">
+            <div class="card__head" style="display:flex;justify-content:space-between;align-items:baseline;">
+                <h3 style="margin:0;">Season progress</h3>
+                <span id="stat-progress-pct" style="font:600 15px var(--sans);color:var(--ink);">–</span>
+            </div>
+            <div class="bigbar"><div class="bigbar__fill" id="progress-bar" style="width:0%">0%</div></div>
+            <div class="meta" id="stat-progress-sub" style="margin:8px 0 0;">–</div>
+        </div>
+        <div class="stat-grid">
+            <div class="stat-card"><div class="stat-card__label">Pending Applications</div><div class="stat-card__value" id="stat-pending-applications">–</div></div>
+            <div class="stat-card"><div class="stat-card__label">Ready to Record</div><div class="stat-card__value" id="stat-ready">–</div></div>
+            <div class="stat-card"><div class="stat-card__label">Pending Store Requests</div><div class="stat-card__value" id="stat-pending-requests">–</div></div>
+            <div class="stat-card"><div class="stat-card__label">Recorded by You</div><div class="stat-card__value" id="stat-my-applications">–</div></div>
+            <div class="stat-card"><div class="stat-card__label">Applications Today</div><div class="stat-card__value" id="stat-applications-today">–</div></div>
+            <div class="stat-card"><div class="stat-card__label">Upcoming Blocks</div><div class="stat-card__value" id="stat-upcoming-blocks">–</div></div>
+        </div>
+        <div class="quick-actions">
+            <button class="btn-big btn-ink" onclick="navigate('upcoming')">Upcoming Applications</button>
+            <button class="btn-big btn-grey" onclick="navigate('blocks')">All Blocks</button>
+        </div>
+    </div>
+
+    <!-- ALL BLOCKS (sections expand to blocks) -->
+    <div id="view-blocks" style="display:none;">
+        <div id="blocks-list"><div class="spinner">Loading blocks…</div></div>
+    </div>
+
+    <!-- UPCOMING: sections -->
+    <div id="view-upcoming" style="display:none;">
+        <div id="upcoming-sections-list"><div class="spinner">Loading sections…</div></div>
+    </div>
+
+    <!-- UPCOMING: plans within a section -->
+    <div id="view-section-plans" style="display:none;">
+        <span class="back-link" onclick="navigate('upcoming')">← Back to sections</span>
+        <div id="section-plans-title" class="card" style="background:var(--grad-ink);color:#fff;"></div>
+        <div id="section-filters"></div>
+        <div id="section-plans-list"></div>
+    </div>
+
+    <!-- UPCOMING: plan detail / request / record -->
+    <div id="view-plan-action" style="display:none;">
+        <span class="back-link" onclick="planActionReturn()">← Back</span>
+        <div id="plan-action-content" class="card"></div>
+    </div>
+
+    <!-- STORE REQUESTS -->
+    <div id="view-store-requests" style="display:none;">
+        <div id="store-requests-list"><div class="spinner">Loading…</div></div>
+    </div>
+
+    <!-- MANAGE TEAM (grouped by section) -->
+    <div id="view-team" style="display:none;">
+        <button class="btn-big btn-ink" onclick="startAddApplicatorFlow()">+ Add Applicator</button>
+        <div id="team-list" style="margin-top:14px;"><div class="spinner">Loading your team…</div></div>
+    </div>
+
+    <!-- APPLICATOR DETAIL -->
+    <div id="view-applicator-detail" style="display:none;">
+        <span class="back-link" onclick="navigate('team')">← Back to team</span>
+        <div id="applicator-detail-content" class="card"></div>
+    </div>
+
+    <!-- GENERIC: pick a section -->
+    <div id="view-pick-section" style="display:none;">
+        <span class="back-link" onclick="navigate('team')">← Cancel</span>
+        <div id="pick-section-box"><div class="spinner">Loading sections…</div></div>
+    </div>
+
+    <!-- GENERIC: pick a block within the chosen section -->
+    <div id="view-pick-block" style="display:none;">
+        <span class="back-link" onclick="navigate('pick-section')">← Back</span>
+        <div id="pick-block-box"><div class="spinner">Loading blocks…</div></div>
+    </div>
+
+    <!-- Add applicator: search + pick employee -->
+    <div id="view-add-employee" style="display:none;">
+        <span class="back-link" onclick="addEmployeeReturn()">← Back</span>
+        <div id="add-employee-box"><div class="spinner">Loading employees…</div></div>
+    </div>
+
+    <!-- RECORD APPLICATION: pick section (issued only) -->
+    <div id="view-record-section" style="display:none;">
+        <div id="record-section-box"><div class="spinner">Loading sections…</div></div>
+    </div>
+
+    <!-- RECORD APPLICATION: pick block (issued only) -->
+    <div id="view-record-block" style="display:none;">
+        <span class="back-link" onclick="navigate('record-section')">← Back</span>
+        <div id="record-block-box"><div class="spinner">Loading blocks…</div></div>
+    </div>
+
+    <!-- RECORD APPLICATION: pick product, if a block has more than one issued plan -->
+    <div id="view-record-plans" style="display:none;">
+        <span class="back-link" onclick="navigate('record-block')">← Back</span>
+        <div id="record-plans-box"></div>
+    </div>
+
+    <!-- ATTENDANCE -->
+    <div id="view-attendance" style="display:none;">
+        <div id="attendance-summary"></div>
+        <div id="attendance-list"><div class="spinner">Loading your team…</div></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div id="view-settings" style="display:none;">
+        <div id="settings-box"></div>
+    </div>
+
+    <!-- CORRECTION -->
+    <div id="view-correction" style="display:none;">
+        <div class="card">
+            <h3>Correction</h3>
+            <p class="meta">Coming soon. Correcting a submitted application or attendance entry will require a PIN, held only by authorized staff, so every correction is attributable to a specific person.</p>
+        </div>
+    </div>
+</div>
+
+<nav class="bnav" id="bottom-nav"></nav>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const QUEUE_KEY = "uc_offline_queue";
+const CACHE_PREFIX = "uc_cache_";
+
+function getQueue() { return JSON.parse(localStorage.getItem(QUEUE_KEY) || "[]"); }
+function setQueue(q) { localStorage.setItem(QUEUE_KEY, JSON.stringify(q)); updateSyncBadge(); }
+function updateSyncBadge() {
+    const n = getQueue().length;
+    const el = document.getElementById("sync-badge");
+    if (n > 0) { el.style.display = "inline-block"; el.textContent = n + " pending sync"; }
+    else { el.style.display = "none"; }
+}
+
+function extractServerMessage(data) {
+    try {
+        if (data._server_messages) {
+            const first = JSON.parse(data._server_messages)[0];
+            const parsed = JSON.parse(first);
+            if (parsed.message) return parsed.message.replace(/<[^>]+>/g, "");
+        }
+    } catch (e) { /* fall through */ }
+    if (data.exception) return data.exception.split(":").pop().trim();
+    return null;
+}
+
+async function rawCall(method, args) {
+    let res;
+    try {
+        res = await fetch("/api/method/mutaracnp.mutaracnp.api." + method, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "same-origin",
+            body: JSON.stringify(args || {}),
+        });
+    } catch (networkErr) {
+        // fetch() itself only throws when the request never reached the
+        // server at all (offline, DNS failure, etc) - this is the only
+        // case that should ever be queued for background sync.
+        const err = new Error("No connection to the server.");
+        err.isNetworkError = true;
+        throw err;
+    }
+
+    let data;
+    try {
+        data = await res.json();
+    } catch (parseErr) {
+        // A non-JSON 200 almost always means the session expired and the
+        // request was redirected to the login page's HTML instead.
+        const err = new Error(res.status === 200
+            ? "Your session has expired. Please log in again."
+            : "Server error (HTTP " + res.status + ").");
+        throw err;
+    }
+
+    if (!res.ok || data.exc) {
+        throw new Error(extractServerMessage(data) || ("Server error (HTTP " + res.status + ")."));
+    }
+    return data.message;
+}
+
+async function call(method, args) {
+    try {
+        const message = await rawCall(method, args);
+        localStorage.setItem(CACHE_PREFIX + method, JSON.stringify({ args, message }));
+        return message;
+    } catch (err) {
+        if (err.isNetworkError) {
+            const cached = localStorage.getItem(CACHE_PREFIX + method);
+            if (cached) {
+                const c = JSON.parse(cached);
+                if (JSON.stringify(c.args) === JSON.stringify(args || {})) return c.message;
+            }
+        }
+        throw err;
+    }
+}
+
+async function writeCall(method, args) {
+    try {
+        return await rawCall(method, args);
+    } catch (err) {
+        if (!err.isNetworkError) {
+            // A real server-side error (permission, validation, expired
+            // session) - surface it as-is. Queuing it for later sync would
+            // just fail again silently for the same reason.
+            throw err;
+        }
+        const q = getQueue();
+        q.push({ method, args, ts: Date.now() });
+        setQueue(q);
+        const queuedErr = new Error("No connection — saved, will send automatically.");
+        queuedErr.queued = true;
+        throw queuedErr;
+    }
+}
+
+async function flushQueue() {
+    const q = getQueue();
+    if (!q.length) return;
+    const remaining = [];
+    let synced = 0;
+    for (const item of q) {
+        try { await rawCall(item.method, item.args); synced++; }
+        catch (e) { remaining.push(item); }
+    }
+    setQueue(remaining);
+    if (synced > 0) {
+        toast(synced + " pending item" + (synced > 1 ? "s" : "") + " synced");
+        refreshCurrentView();
+    }
+}
+window.addEventListener("online", flushQueue);
+setInterval(flushQueue, 30000);
+
+function toast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg; t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 2800);
+}
+function initials(name) {
+    const parts = (name || "?").trim().split(/\s+/);
+    return ((parts[0]||"")[0] || "?").toUpperCase() + ((parts[1]||"")[0] || "").toUpperCase();
+}
+
+// Item codes ("1010100032") are what the store and the plan documents run on,
+// but they mean nothing to a supervisor in the field. Lead with the fertilizer
+// name everywhere, and keep the code beside it so it can still be checked
+// against store paperwork. Falls back to the code when there's no name.
+function productName(p) { return (p && (p.fertilizer_product_name || p.fertilizer_product)) || ""; }
+function productCode(p) { return (p && p.fertilizer_product) || ""; }
+
+// Generic searchable pick list - renders a search box + a list of rows into
+// `containerId`, filtering live. Used everywhere a supervisor picks one of
+// a section / block / employee, so search is available everywhere instead
+// of a long unfiltered list.
+function renderPickList(containerId, items, opts) {
+    const container = document.getElementById(containerId);
+    if (!items || !items.length) {
+        container.innerHTML = `<div class="empty">${opts.emptyText || "Nothing to show."}</div>`;
+        return;
+    }
+    const searchId = containerId + "-search";
+    const listId = containerId + "-listbox";
+    container.innerHTML = `
+        <input class="field-input" id="${searchId}" type="text" placeholder="${opts.placeholder || 'Search…'}">
+        <div id="${listId}"></div>`;
+    const listEl = document.getElementById(listId);
+
+    function draw(filter) {
+        const f = (filter || "").toLowerCase();
+        const rows = items.map((it, idx) => ({ it, idx })).filter(({ it }) => opts.getLabel(it).toLowerCase().includes(f));
+        listEl.innerHTML = rows.length
+            ? rows.map(({ it, idx }) => `
+                <div class="pick-row" data-idx="${idx}">
+                    ${opts.getSub ? `<div class="initial">${initials(opts.getLabel(it))}</div>` : ""}
+                    <div class="name">${opts.getLabel(it)}${opts.getSub ? `<div class="block-tag">${opts.getSub(it) || ""}</div>` : ""}</div>
+                </div>`).join("")
+            : `<div class="empty">No matches.</div>`;
+    }
+    listEl.onclick = (e) => {
+        const row = e.target.closest(".pick-row");
+        if (!row) return;
+        opts.onSelect(items[parseInt(row.dataset.idx, 10)]);
+    };
+    document.getElementById(searchId).oninput = (e) => draw(e.target.value);
+    draw("");
+}
+
+// --- Drawer ---
+function openDrawer() { document.getElementById("drawer").classList.add("open"); document.getElementById("overlay").classList.add("open"); }
+function closeDrawer() { document.getElementById("drawer").classList.remove("open"); document.getElementById("overlay").classList.remove("open"); }
+
+// --- Navigation ---
+const VIEWS = ["home", "blocks", "upcoming", "section-plans", "plan-action", "store-requests",
+    "team", "attendance", "applicator-detail", "pick-section", "pick-block", "add-employee",
+    "record-section", "record-block", "record-plans", "correction", "settings"];
+const TITLES = { home: "Home", blocks: "All Blocks", upcoming: "Upcoming Applications", "section-plans": "Section",
+    "plan-action": "Application", "store-requests": "Store Requests", team: "Manage Team",
+    "applicator-detail": "Applicator", "pick-section": "Choose Section", "pick-block": "Choose Block",
+    "add-employee": "Choose Applicator", "record-section": "Record Application", "record-block": "Choose Block",
+    "record-plans": "Choose Product", correction: "Correction",
+    attendance: "Attendance", settings: "Settings" };
+let currentView = "home";
+let currentSection = null;
+let currentPlan = null;
+
+function navigate(view) {
+    closeDrawer();
+    currentView = view;
+    // The home button is a no-op on home itself, so don't offer it there.
+    document.getElementById("home-btn").style.display = view === "home" ? "none" : "grid";
+    VIEWS.forEach(v => document.getElementById("view-" + v).style.display = v === view ? "block" : "none");
+    document.querySelectorAll(".drawer__item").forEach(b => b.classList.toggle("on", b.dataset.nav === view));
+    document.getElementById("header-sub").textContent = TITLES[view] || "";
+    if (view === "home") loadHome();
+    else if (view === "blocks") loadAllBlocks();
+    else if (view === "upcoming") loadUpcomingSections();
+    else if (view === "store-requests") loadStoreRequests();
+    else if (view === "team") loadTeam();
+    else if (view === "pick-section") loadPickSections();
+    else if (view === "pick-block") loadPickBlocks();
+    else if (view === "add-employee") loadAddApplicatorList();
+    else if (view === "record-section") loadRecordSections();
+    else if (view === "record-block") loadRecordBlocks();
+    else if (view === "attendance") loadAttendance();
+    else if (view === "settings") loadSettings();
+    syncBottomNav(view);
+}
+
+function refreshCurrentView() { navigate(currentView); }
+
+// --- Home ---
+async function loadHome() {
+    const user = "{{ frappe.session.user }}";
+    document.getElementById("home-greeting").textContent = "Hello, " + (user.split("@")[0] || "there");
+
+    call("get_home_metrics", {}).then(m => {
+        const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+        set("stat-pending-applications", m.pending_applications);
+        set("stat-ready", m.ready_to_record);
+        set("stat-pending-requests", m.pending_requests);
+        set("stat-my-applications", m.my_applications);
+        set("stat-applications-today", m.applications_today);
+        set("stat-progress-pct", m.progress_pct + "%");
+        set("stat-progress-sub", `${m.applied} of ${m.total_plans} applications done across the farm`);
+        const bar = document.getElementById("progress-bar");
+        bar.style.width = m.progress_pct + "%";
+        bar.textContent = m.progress_pct + "%";
+    }).catch(err => {
+        document.getElementById("stat-progress-sub").textContent = err.message || "Could not load metrics.";
+    });
+
+    call("get_upcoming_and_overdue", {}).then(d => {
+        document.getElementById("stat-upcoming-blocks").textContent = (d.upcoming || []).length;
+    }).catch(() => {});
+}
+
+// --- All Blocks: sections expand to blocks ---
+async function loadAllBlocks() {
+    const list = document.getElementById("blocks-list");
+    list.innerHTML = '<div class="spinner">Loading blocks…</div>';
+    call("get_block_progress", {}).then(sections => {
+        openBlockGroup = null;
+        if (!sections || !sections.length) { list.innerHTML = '<div class="empty">No blocks in this programme yet.</div>'; return; }
+        const pillFor = s => s === "Completed" ? "good" : s === "Behind Schedule" ? "bad" : s === "In Progress" ? "info" : "mute";
+        list.innerHTML = sections.map((sec, i) => `
+            <div class="section-group">
+                <div class="section-group__head" onclick="toggleBlockGroup(${i})">
+                    <div><b>${sec.section}</b><div class="count">${sec.total_blocks} blocks · ${sec.pct_complete}% done</div></div>
+                    <span class="chevron" id="chev-${i}">›</span>
+                </div>
+                <div class="section-group__body" id="grp-${i}" style="display:none;">
+                    ${sec.blocks.map(b => `
+                        <div class="block-row">
+                            <span class="name">${b.block}</span>
+                            <span class="pill ${pillFor(b.status)}">${b.status}</span>
+                        </div>`).join("")}
+                </div>
+            </div>`).join("");
+    }).catch(err => { list.innerHTML = `<div class="empty">${err.message || "Could not load. Please refresh."}</div>`; });
+}
+// Accordion: only one section stays open. With 78 blocks across four
+// sections, leaving them all expanded buries the list under a lot of
+// scrolling, so opening one collapses whatever was open before.
+let openBlockGroup = null;
+
+function toggleBlockGroup(i) {
+    const body = document.getElementById("grp-" + i);
+    const chev = document.getElementById("chev-" + i);
+    const opening = body.style.display === "none";
+
+    if (opening && openBlockGroup !== null && openBlockGroup !== i) {
+        const prev = document.getElementById("grp-" + openBlockGroup);
+        const prevChev = document.getElementById("chev-" + openBlockGroup);
+        if (prev) prev.style.display = "none";
+        if (prevChev) prevChev.style.transform = "rotate(0deg)";
+    }
+
+    body.style.display = opening ? "block" : "none";
+    chev.style.transform = opening ? "rotate(90deg)" : "rotate(0deg)";
+    openBlockGroup = opening ? i : null;
+}
+
+// --- Upcoming Applications: sections -> plans -> action ---
+async function loadUpcomingSections() {
+    const list = document.getElementById("upcoming-sections-list");
+    list.innerHTML = '<div class="spinner">Loading sections…</div>';
+    call("get_sections_with_pending_work", {}).then(sections => {
+        if (!sections || !sections.length) { list.innerHTML = '<div class="empty">No pending work. All caught up! 🎉</div>'; return; }
+        list.innerHTML = sections.map(s => `
+            <div class="section-row" onclick="openSection('${s.section}')">
+                <div><div class="name">${s.section}</div><div class="count">${s.pending_count} pending</div></div>
+                <span class="arrow">→</span>
+            </div>`).join("");
+    }).catch(err => { list.innerHTML = `<div class="empty">${err.message || "Could not load. Please refresh."}</div>`; });
+}
+
+function openSection(section) {
+    currentSection = section;
+    VIEWS.forEach(v => document.getElementById("view-" + v).style.display = v === "section-plans" ? "block" : "none");
+    document.getElementById("header-sub").textContent = section;
+    document.getElementById("section-plans-title").innerHTML = `<h3 style="color:#fff;margin:0;">${section}</h3>`;
+    const list = document.getElementById("section-plans-list");
+    document.getElementById("section-filters").innerHTML = "";
+    list.innerHTML = '<div class="spinner">Loading…</div>';
+    call("get_pending_plans_for_section", { section }).then(plans => {
+        sectionPlans = plans || [];
+        if (!sectionPlans.length) { list.innerHTML = '<div class="empty">Nothing pending in this section.</div>'; return; }
+        renderSectionFilters();
+        drawSectionPlans();
+    }).catch(err => { list.innerHTML = `<div class="empty">${err.message || "Could not load. Please refresh."}</div>`; });
+}
+
+// A section can hold dozens of plans across several products, so let the
+// supervisor narrow to the block in front of them or the product they are
+// carrying before the list starts.
+let sectionPlans = [];
+
+function renderSectionFilters() {
+    const blocks = [...new Set(sectionPlans.map(p => p.block).filter(Boolean))].sort();
+    const products = [...new Set(sectionPlans.map(p => productCode(p)).filter(Boolean))]
+        .map(code => ({ code, name: productName(sectionPlans.find(p => productCode(p) === code)) }))
+        .sort((a, b) => a.name.localeCompare(b.name));
+
+    document.getElementById("section-filters").innerHTML = `
+        <div class="filter-row">
+            <select class="field-input filter-select" id="filter-block" onchange="drawSectionPlans()">
+                <option value="">All blocks (${blocks.length})</option>
+                ${blocks.map(b => `<option value="${b}">${b}</option>`).join("")}
+            </select>
+            <select class="field-input filter-select" id="filter-product" onchange="drawSectionPlans()">
+                <option value="">All products (${products.length})</option>
+                ${products.map(p => `<option value="${p.code}">${p.name}</option>`).join("")}
+            </select>
+        </div>`;
+}
+
+function drawSectionPlans() {
+    const list = document.getElementById("section-plans-list");
+    const blockFilter = (document.getElementById("filter-block") || {}).value || "";
+    const productFilter = (document.getElementById("filter-product") || {}).value || "";
+    const rows = sectionPlans.filter(p =>
+        (!blockFilter || p.block === blockFilter) &&
+        (!productFilter || productCode(p) === productFilter));
+
+    if (!rows.length) {
+        list.innerHTML = '<div class="empty">Nothing matches this filter.</div>';
+        return;
+    }
+
+    list.innerHTML = rows.map(p => {
+        let pill, btn;
+        if (p.status === "Issued") {
+            pill = '<span class="pill good">Issued — ready to apply</span>';
+            btn = `<button class="btn-big btn-warn" onclick='openPlanAction(${JSON.stringify(p)}, "record")'>Record application</button>`;
+        } else if (p.request_status === "Pending Approval") {
+            pill = '<span class="pill warn">Pending approval</span>';
+            btn = `<button class="btn-big btn-grey" onclick='openPlanAction(${JSON.stringify(p)}, "status")'>Show status</button>`;
+        } else if (p.request_status === "Approved") {
+            pill = '<span class="pill info">Approved — awaiting store issue</span>';
+            btn = `<button class="btn-big btn-grey" onclick='openPlanAction(${JSON.stringify(p)}, "status")'>Show status</button>`;
+        } else if (p.request_status === "Draft") {
+            pill = '<span class="pill warn">Draft — not submitted</span>';
+            btn = `<button class="btn-big btn-grey" onclick='openPlanAction(${JSON.stringify(p)}, "status")'>Show status</button>`;
+        } else if (p.request_status === "Rejected") {
+            pill = '<span class="pill bad">Rejected</span>';
+            btn = `<button class="btn-big btn-ink" onclick='openPlanAction(${JSON.stringify(p)}, "request")'>Request again</button>`;
+        } else if (p.request_status === "Cancelled") {
+            pill = '<span class="pill mute">Cancelled</span>';
+            btn = `<button class="btn-big btn-ink" onclick='openPlanAction(${JSON.stringify(p)}, "request")'>Request again</button>`;
+        } else {
+            pill = '<span class="pill mute">Planned</span>';
+            btn = `<button class="btn-big btn-ink" onclick='openPlanAction(${JSON.stringify(p)}, "request")'>Request from store</button>`;
+        }
+        return `<div class="card" style="box-shadow:var(--shadow-card);margin-bottom:10px;">
+            ${pill}
+            <h3>${p.block} · ${productName(p)}</h3>
+            <div class="meta">${productCode(p)} · ${p.application_month} · ${p.total_kg_required} Kg planned</div>
+            ${btn}
+        </div>`;
+    }).join("");
+}
+
+
+function backToSectionPlans() {
+    VIEWS.forEach(v => document.getElementById("view-" + v).style.display = v === "section-plans" ? "block" : "none");
+    if (currentSection) openSection(currentSection);
+    else navigate("upcoming");
+}
+
+// planActionReturn controls where the "← Back" link on the plan-action view
+// goes - defaults to the Upcoming Applications section list, but the
+// dedicated Record Application flow points it back to its own block list.
+let planActionReturn = backToSectionPlans;
+
+function openPlanAction(plan, mode, returnFn) {
+    currentPlan = plan;
+    planActionReturn = returnFn || backToSectionPlans;
+    VIEWS.forEach(v => document.getElementById("view-" + v).style.display = v === "plan-action" ? "block" : "none");
+    const box = document.getElementById("plan-action-content");
+    if (mode === "status") {
+        const labels = {
+            "Draft":            "📝 Draft — not yet submitted for approval.",
+            "Pending Approval": "⏳ Pending approval — waiting for the farm manager.",
+            "Approved":         "✅ Approved — waiting for the store to issue the fertilizer.",
+            "Issued":           "📦 Issued — collect it from the store and record the application.",
+            "Rejected":         "❌ Rejected — raise a new request if it is still needed.",
+            "Cancelled":        "🚫 Cancelled — raise a new one if it is still needed.",
+        };
+        box.innerHTML = `<h3>${plan.block} · ${productName(plan)}</h3><p class="meta">${productCode(plan)}</p><p class="meta">${labels[plan.request_status] || plan.request_status}</p>
+            <button class="btn-big btn-grey" onclick="planActionReturn()">Back</button>`;
+    } else if (mode === "request") {
+        box.innerHTML = `
+            <h3>Request ${productName(plan)}</h3>
+            <div class="meta">${productCode(plan)} · ${plan.block} · ${plan.application_month}</div>
+            <label style="font-size:13px;color:var(--ink-4);">Quantity to request (Kg)</label>
+            <input class="field-input" id="req-qty" type="number" value="${plan.total_kg_required}">
+            <button class="btn-big btn-ink" onclick="submitRequest()">Send request to store</button>`;
+    } else if (mode === "record") {
+        loadOperatorPicker();
+    }
+}
+
+function submitRequest() {
+    const qty = document.getElementById("req-qty").value;
+    writeCall("create_store_request", { block_fertilizer_plan: currentPlan.name, quantity: qty })
+        .then(r => { toast("Request sent: " + r.name); planActionReturn(); })
+        .catch(err => {
+            toast(err.message);
+            if (err.queued) planActionReturn();
+        });
+}
+
+// --- Record application (multi-applicator, auto-filled from block assignment) ---
+let selectedOperators = [];
+
+let operatorRoster = [];
+
+function loadOperatorPicker() {
+    selectedOperators = [];
+    operatorRoster = [];
+    const box = document.getElementById("plan-action-content");
+    box.innerHTML = `<div class="spinner">Loading applicators…</div>`;
+    call("get_applicators_for_block", { block: currentPlan.block }).then(roster => {
+        operatorRoster = roster || [];
+        if (!operatorRoster.length) {
+            box.innerHTML = `
+                <h3>Who applied this?</h3>
+                <div class="empty">No applicators are assigned to ${currentPlan.block} yet. Assign some under Manage Team, or continue without selecting anyone.</div>
+                <button class="btn-big btn-warn" onclick="openRecordQty()">Continue</button>`;
+            return;
+        }
+        selectedOperators = operatorRoster.map(a => a.name);
+        box.innerHTML = `
+            <h3>Who applied this?</h3>
+            <div class="meta">${currentPlan.block} · ${productName(currentPlan)} · everyone assigned to this block is pre-selected — adjust if needed</div>
+            ${operatorRoster.length > 6 ? `<input class="field-input" id="operator-search" type="text" placeholder="Search applicators…" oninput="drawOperatorPicker(this.value)">` : ""}
+            <div id="operator-picker"></div>
+            <button class="btn-big btn-warn" id="op-continue" onclick="openRecordQty()"></button>`;
+        drawOperatorPicker("");
+    });
+}
+
+function drawOperatorPicker(filter) {
+    const f = (filter || "").toLowerCase();
+    const rows = operatorRoster.filter(a => a.employee_name.toLowerCase().includes(f));
+    document.getElementById("operator-picker").innerHTML = rows.length
+        ? rows.map(a => `
+            <div class="pick-row ${selectedOperators.includes(a.name) ? 'selected' : ''}" id="pick-${a.name}" onclick="toggleOperator('${a.name}')">
+                <div class="initial">${initials(a.employee_name)}</div>
+                <div class="name">${a.employee_name}</div>
+                <div class="check"></div>
+            </div>`).join("")
+        : `<div class="empty">No matches.</div>`;
+    updateOperatorContinueButton();
+}
+
+function updateOperatorContinueButton() {
+    const btn = document.getElementById("op-continue");
+    btn.disabled = selectedOperators.length === 0;
+    btn.style.opacity = selectedOperators.length ? "1" : ".5";
+    btn.textContent = selectedOperators.length ? `Continue (${selectedOperators.length} selected)` : "Select at least one applicator";
+}
+
+function toggleOperator(name) {
+    const idx = selectedOperators.indexOf(name);
+    if (idx >= 0) selectedOperators.splice(idx, 1);
+    else selectedOperators.push(name);
+    const row = document.getElementById("pick-" + name);
+    if (row) row.classList.toggle("selected", selectedOperators.includes(name));
+    updateOperatorContinueButton();
+}
+
+function openRecordQty() {
+    const plan = currentPlan;
+    document.getElementById("plan-action-content").innerHTML = `
+        <h3>Record ${productName(plan)}</h3>
+        <div class="meta">${productCode(plan)} · ${plan.block} · ${plan.application_month} · ${plan.total_kg_required} Kg planned</div>
+        <label style="font-size:13px;color:var(--ink-4);">Actual quantity applied (Kg)</label>
+        <input class="field-input" id="act-qty" type="number" value="${plan.total_kg_required}">
+        <div class="toggle-row">
+            <input type="checkbox" id="in-full" checked onchange="toggleReason()">
+            <label for="in-full">Applied in full</label>
+        </div>
+        <div id="reason-box" style="display:none;">
+            <label style="font-size:13px;color:var(--ink-4);">Reason it was not done in full</label>
+            <input class="field-input" id="reason" type="text" placeholder="e.g. ran out of stock">
+        </div>
+        <button class="btn-big btn-warn" onclick="submitRecord()">Submit application</button>`;
+}
+
+function toggleReason() {
+    const full = document.getElementById("in-full").checked;
+    document.getElementById("reason-box").style.display = full ? "none" : "block";
+}
+
+function submitRecord() {
+    const qty = document.getElementById("act-qty").value;
+    const full = document.getElementById("in-full").checked;
+    const reason = full ? "" : (document.getElementById("reason").value || "");
+    if (!full && !reason) { toast("Please give a reason"); return; }
+    call("get_issued_request_for_plan", { block_fertilizer_plan: currentPlan.name }).then(sr => {
+        if (!sr) {
+            toast("No fully-issued store request found for this block — check Store Requests before recording.");
+            return;
+        }
+        writeCall("record_application", {
+            block_fertilizer_plan: currentPlan.name,
+            actual_quantity: qty,
+            applied_in_full: full ? 1 : 0,
+            partial_reason: reason,
+            store_request: sr || null,
+            operators: selectedOperators,
+        }).then(r => { toast("Application recorded: " + r.name); planActionReturn(); })
+        .catch(err => {
+            toast(err.message);
+            if (err.queued) planActionReturn();
+        });
+    });
+}
+
+// --- Attendance ---
+// The supervisor's own applicators only, grouped by the block they work.
+function loadAttendance() {
+    const list = document.getElementById("attendance-list");
+    const summary = document.getElementById("attendance-summary");
+    summary.innerHTML = "";
+    list.innerHTML = '<div class="spinner">Loading your team…</div>';
+    call("get_attendance_by_block", {}).then(groups => {
+        if (!groups || !groups.length) {
+            list.innerHTML = '<div class="empty">No applicators on your team yet. Add them under Manage Team.</div>';
+            return;
+        }
+        const present = groups.reduce((n, g) => n + g.present, 0);
+        const absent = groups.reduce((n, g) => n + g.absent, 0);
+        const unmarked = groups.reduce((n, g) => n + g.unmarked, 0);
+        summary.innerHTML = `
+            <div class="stat-grid" style="grid-template-columns:1fr 1fr 1fr;">
+                <div class="stat-card"><div class="stat-card__label">Present</div><div class="stat-card__value good">${present}</div></div>
+                <div class="stat-card"><div class="stat-card__label">Absent</div><div class="stat-card__value bad">${absent}</div></div>
+                <div class="stat-card"><div class="stat-card__label">Not marked</div><div class="stat-card__value">${unmarked}</div></div>
+            </div>`;
+
+        list.innerHTML = groups.map(g => `
+            <div class="section-group">
+                <div class="section-group__head" style="cursor:default;">
+                    <div><b>${g.block}</b><div class="count">${g.present} present · ${g.absent} absent · ${g.unmarked} not marked</div></div>
+                </div>
+                <div class="section-group__body">
+                    ${g.applicators.map(a => `
+                        <div class="roster-row">
+                            <div class="initial">${initials(a.employee_name)}</div>
+                            <div class="info">
+                                <div class="name">${a.employee_name}</div>
+                                <div class="block-tag">${a.employee_number || "no employee number"}</div>
+                            </div>
+                            <div class="att-btns">
+                                <button class="att-btn ${a.status === 'Present' ? 'btn-good' : 'btn-grey'}" onclick="setAttendanceFrom('attendance','${a.name}','Present')">In</button>
+                                <button class="att-btn ${a.status === 'Absent' ? 'btn-bad' : 'btn-grey'}" onclick="setAttendanceFrom('attendance','${a.name}','Absent')">Out</button>
+                            </div>
+                        </div>`).join("")}
+                </div>
+            </div>`).join("");
+    }).catch(err => { list.innerHTML = `<div class="empty">${err.message || "Could not load. Please refresh."}</div>`; });
+}
+
+// Shared by Manage Team and Attendance so both refresh the screen you're on.
+function setAttendanceFrom(origin, employee, status) {
+    writeCall("mark_attendance", { employee, status })
+        .then(() => { toast(status + " marked"); origin === "attendance" ? loadAttendance() : loadTeam(); })
+        .catch(err => toast(err.message));
+}
+
+// --- Settings ---
+// Kept on the device: these are per-person display preferences, not farm data,
+// and a supervisor changing text size shouldn't write to the database.
+const SETTINGS_KEY = "uc_settings";
+const DEFAULT_SETTINGS = { fontScale: 100, bigTouch: false, bottomNav: true, confirmSubmit: false };
+
+function getSettings() {
+    try { return Object.assign({}, DEFAULT_SETTINGS, JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}")); }
+    catch (e) { return Object.assign({}, DEFAULT_SETTINGS); }
+}
+function saveSettings(s) {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
+    applySettings();
+}
+function applySettings() {
+    const s = getSettings();
+    document.documentElement.style.fontSize = (16 * s.fontScale / 100) + "px";
+    document.body.classList.toggle("big-touch", !!s.bigTouch);
+    const nav = document.getElementById("bottom-nav");
+    if (nav) nav.style.display = s.bottomNav ? "flex" : "none";
+    document.body.style.paddingBottom = s.bottomNav ? "72px" : "0";
+}
+
+function loadSettings() {
+    const s = getSettings();
+    document.getElementById("settings-box").innerHTML = `
+        <div class="card">
+            <h3>Display</h3>
+            <p class="meta">Saved on this phone only — it won't change anything for anyone else.</p>
+
+            <label style="font-size:13px;color:var(--ink-4);">Text size — <b id="font-val">${s.fontScale}%</b></label>
+            <input type="range" min="85" max="145" step="5" value="${s.fontScale}" id="set-font"
+                   style="width:100%;margin:10px 0 4px;" oninput="onFontInput(this.value)">
+            <div class="meta" style="display:flex;justify-content:space-between;margin:0 0 14px;">
+                <span>Smaller</span><span>Larger</span>
+            </div>
+
+            <div class="toggle-row">
+                <input type="checkbox" id="set-touch" ${s.bigTouch ? "checked" : ""} onchange="onSettingToggle('bigTouch', this.checked)">
+                <label for="set-touch">Bigger buttons — easier with gloves on</label>
+            </div>
+            <div class="toggle-row">
+                <input type="checkbox" id="set-nav" ${s.bottomNav ? "checked" : ""} onchange="onSettingToggle('bottomNav', this.checked)">
+                <label for="set-nav">Show the quick bar at the bottom</label>
+            </div>
+            <div class="toggle-row">
+                <input type="checkbox" id="set-confirm" ${s.confirmSubmit ? "checked" : ""} onchange="onSettingToggle('confirmSubmit', this.checked)">
+                <label for="set-confirm">Ask me to confirm before submitting</label>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>This device</h3>
+            <div class="meta">Signed in as {{ frappe.session.user }}</div>
+            <div class="meta" id="settings-queue"></div>
+            <button class="btn-big btn-grey" onclick="resetSettings()">Reset display settings</button>
+            <button class="btn-big btn-warn" onclick="flushQueue()">Sync pending items now</button>
+        </div>`;
+    const q = getQueue().length;
+    document.getElementById("settings-queue").textContent =
+        q ? `${q} item${q > 1 ? "s" : ""} waiting to sync` : "Everything is synced";
+}
+
+function onFontInput(v) {
+    document.getElementById("font-val").textContent = v + "%";
+    const s = getSettings(); s.fontScale = parseInt(v, 10); saveSettings(s);
+}
+function onSettingToggle(key, val) {
+    const s = getSettings(); s[key] = val; saveSettings(s);
+}
+function resetSettings() {
+    localStorage.removeItem(SETTINGS_KEY);
+    applySettings(); loadSettings(); toast("Display settings reset");
+}
+
+// --- Bottom quick bar ---
+const BOTTOM_NAV = [
+    { view: "home",           label: "Home",     icon: "M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" },
+    { view: "upcoming",       label: "Upcoming", icon: "M12 8v4l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" },
+    { view: "record-section", label: "Record",   icon: "M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" },
+    { view: "team",           label: "Team",     icon: "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" },
+    { view: "attendance",     label: "Register", icon: "M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" },
+];
+
+function renderBottomNav() {
+    document.getElementById("bottom-nav").innerHTML = BOTTOM_NAV.map(n => `
+        <button class="bnav__item" data-bnav="${n.view}" onclick="navigate('${n.view}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${n.icon}"/></svg>
+            <span>${n.label}</span>
+        </button>`).join("");
+}
+
+function syncBottomNav(view) {
+    document.querySelectorAll(".bnav__item").forEach(b =>
+        b.classList.toggle("on", b.dataset.bnav === view));
+}
+
+// --- Store Requests status ---
+async function loadStoreRequests() {
+    const list = document.getElementById("store-requests-list");
+    list.innerHTML = '<div class="spinner">Loading…</div>';
+    call("get_store_requests", {}).then(reqs => {
+        if (!reqs || !reqs.length) { list.innerHTML = '<div class="empty">No store requests yet.</div>'; return; }
+        const pillFor = s => s === "Issued" ? "good" : s === "Approved" ? "info"
+            : s === "Rejected" ? "bad" : (s === "Cancelled" || s === "Draft") ? "mute" : "warn";
+        list.innerHTML = reqs.map(r => `
+            <div class="request-row">
+                <div>
+                    <div class="name">${r.block || "—"}</div>
+                    <div class="meta">${productName(r)}${productCode(r) ? " · " + productCode(r) : ""}${r.date ? " · " + r.date : ""}</div>
+                </div>
+                <span class="pill ${pillFor(r.status)}">${r.status}</span>
+            </div>`).join("");
+    }).catch(err => { list.innerHTML = `<div class="empty">${err.message || "Could not load. Please refresh."}</div>`; });
+}
+
+// --- Manage Team: grouped by section ---
+let teamData = {};
+
+function loadTeam() {
+    const list = document.getElementById("team-list");
+    list.innerHTML = '<div class="spinner">Loading your team…</div>';
+    call("get_my_applicators_by_section", {}).then(sections => {
+        if (!sections || !sections.length) {
+            list.innerHTML = '<div class="empty">No applicators on your team yet. Tap "Add Applicator" above.</div>';
+            return;
+        }
+        teamData = {};
+        list.innerHTML = sections.map(sec => `
+            <div class="section-group">
+                <div class="section-group__head" style="cursor:default;">
+                    <b>${sec.section}</b><span class="count">${sec.blocks.reduce((n, b) => n + b.applicators.length, 0)}</span>
+                </div>
+                <div class="section-group__body">
+                    ${sec.blocks.map(blk => `
+                        <div class="block-subhead">
+                            <span>${blk.block}</span>
+                            ${blk.block !== "No block assigned" ? `<button class="add-chip" onclick="quickAddApplicator('${blk.block}')" title="Add applicator to ${blk.block}">+</button>` : ""}
+                        </div>
+                        ${blk.applicators.map(a => {
+                            teamData[a.name] = a;
+                            return `
+                            <div class="roster-row">
+                                <div class="initial" onclick="openApplicatorDetail('${a.name}')">${initials(a.employee_name)}</div>
+                                <div class="info" onclick="openApplicatorDetail('${a.name}')">
+                                    <div class="name">${a.employee_name}</div>
+                                </div>
+                                <div class="att-btns">
+                                    <button class="att-btn ${a.attendance_status === 'Present' ? 'btn-good' : 'btn-grey'}" onclick="setAttendance('${a.name}','Present')">In</button>
+                                    <button class="att-btn ${a.attendance_status === 'Absent' ? 'btn-bad' : 'btn-grey'}" onclick="setAttendance('${a.name}','Absent')">Out</button>
+                                </div>
+                            </div>`;
+                        }).join("")}
+                    `).join("")}
+                </div>
+            </div>`).join("");
+    }).catch(err => { list.innerHTML = `<div class="empty">${err.message || "Could not load. Please refresh."}</div>`; });
+}
+
+function setAttendance(employee, status) {
+    setAttendanceFrom("team", employee, status);
+}
+
+// --- Applicator detail + reassign ---
+let currentApplicator = null;
+
+function openApplicatorDetail(employee) {
+    currentApplicator = teamData[employee] || { name: employee, employee_name: employee };
+    VIEWS.forEach(v => document.getElementById("view-" + v).style.display = v === "applicator-detail" ? "block" : "none");
+    document.getElementById("header-sub").textContent = "Applicator";
+    const box = document.getElementById("applicator-detail-content");
+    box.innerHTML = `<div class="spinner">Loading…</div>`;
+    call("get_operator_activity", { employees: [employee], group_by: "operator" }).then(data => {
+        const stats = (data || [])[0];
+        box.innerHTML = `
+            <h3>${currentApplicator.employee_name}</h3>
+            <div class="meta">${currentApplicator.custom_assigned_block ? "📍 " + currentApplicator.custom_assigned_block : "No block assigned"}</div>
+            <p style="font-size:13px;color:var(--ink-4);margin:0 0 6px;">${stats ? `${stats.applications} application${stats.applications === 1 ? "" : "s"} recorded · ${stats.total_kg.toLocaleString()} Kg total` : "No applications recorded yet."}</p>
+            <button class="btn-big btn-ink" onclick="startReassignFlow('${employee}')">Reassign block</button>
+            <button class="btn-big btn-bad" onclick="doRemoveApplicatorFromDetail('${employee}')">Remove from team</button>`;
+    });
+}
+
+function doRemoveApplicatorFromDetail(employee) {
+    writeCall("remove_applicator", { employee })
+        .then(() => { toast("Removed from your team"); navigate("team"); })
+        .catch(err => {
+            toast(err.message);
+            if (err.queued) navigate("team");
+        });
+}
+
+// --- Generic Section -> Block picker, shared by Add Applicator and Reassign ---
+let pickPurpose = null; // "add" | "reassign"
+let pickedSection = null;
+let pickedBlock = null;
+let reassignEmployee = null;
+// Where the "← Back" on the employee-search screen goes - the full
+// Add Applicator flow backs up into block picking, but the per-block "+"
+// shortcut on Manage Team skips straight there, so it should back out to
+// Manage Team instead.
+let addEmployeeReturn = () => navigate("pick-block");
+
+function startAddApplicatorFlow() {
+    pickPurpose = "add";
+    pickedBlock = null;
+    addEmployeeReturn = () => navigate("pick-block");
+    navigate("pick-section");
+}
+
+// Quick-add: a block already has at least one applicator, so skip
+// section/block selection entirely and jump straight to picking the next
+// employee for that same block.
+function quickAddApplicator(block) {
+    pickPurpose = "add";
+    pickedBlock = block;
+    addEmployeeReturn = () => navigate("team");
+    navigate("add-employee");
+}
+
+function startReassignFlow(employee) {
+    pickPurpose = "reassign";
+    reassignEmployee = employee;
+    navigate("pick-section");
+}
+
+function loadPickSections() {
+    call("get_all_sections", {}).then(sections => {
+        renderPickList("pick-section-box", sections, {
+            placeholder: "Search sections…",
+            getLabel: s => s.section_name || s.name,
+            onSelect: s => { pickedSection = s.name; navigate("pick-block"); },
+            emptyText: "No sections found.",
+        });
+    }).catch(err => { document.getElementById("pick-section-box").innerHTML = `<div class="empty">${err.message || "Could not load. Please refresh."}</div>`; });
+}
+
+function loadPickBlocks() {
+    document.getElementById("header-sub").textContent = pickedSection || "Choose Block";
+    call("get_blocks_in_section", { section: pickedSection }).then(blocks => {
+        renderPickList("pick-block-box", blocks, {
+            placeholder: "Search blocks…",
+            getLabel: b => b.name,
+            onSelect: b => {
+                pickedBlock = b.name;
+                if (pickPurpose === "add") {
+                    navigate("add-employee");
+                } else {
+                    writeCall("assign_block", { employee: reassignEmployee, block: pickedBlock })
+                        .then(() => { toast("Block reassigned"); navigate("team"); })
+                        .catch(err => {
+                            toast(err.message);
+                            if (err.queued) navigate("team");
+                        });
+                }
+            },
+            emptyText: "No blocks in this section.",
+        });
+    }).catch(err => { document.getElementById("pick-block-box").innerHTML = `<div class="empty">${err.message || "Could not load. Please refresh."}</div>`; });
+}
+
+function loadAddApplicatorList() {
+    document.getElementById("header-sub").textContent = "Assign to " + (pickedBlock || "block");
+    call("get_available_employees_for_team", {}).then(employees => {
+        renderPickList("add-employee-box", employees, {
+            placeholder: "Search employees by name…",
+            getLabel: e => e.employee_name,
+            onSelect: e => doAddApplicator(e.name),
+            emptyText: "No available employees to add right now.",
+        });
+    }).catch(err => { document.getElementById("add-employee-box").innerHTML = `<div class="empty">${err.message || "Could not load. Please refresh."}</div>`; });
+}
+
+function doAddApplicator(employee) {
+    writeCall("add_applicator", { employee })
+        .then(() => pickedBlock ? writeCall("assign_block", { employee, block: pickedBlock }) : null)
+        .then(() => { toast("Applicator added"); navigate("team"); })
+        .catch(err => {
+            toast(err.message);
+            if (err.queued) navigate("team");
+        });
+}
+
+// --- Record Application: Section -> Block (issued only) -> [product] -> form ---
+let recordSection = null;
+
+function loadRecordSections() {
+    call("get_sections_with_issued_work", {}).then(sections => {
+        renderPickList("record-section-box", sections, {
+            placeholder: "Search sections…",
+            getLabel: s => s.section,
+            getSub: s => `${s.pending_count} block${s.pending_count === 1 ? "" : "s"} ready to record`,
+            onSelect: s => { recordSection = s.section; navigate("record-block"); },
+            emptyText: "No blocks are ready to record yet — fertilizer must be issued from store first.",
+        });
+    }).catch(err => { document.getElementById("record-section-box").innerHTML = `<div class="empty">${err.message || "Could not load. Please refresh."}</div>`; });
+}
+
+function loadRecordBlocks() {
+    document.getElementById("header-sub").textContent = recordSection || "Choose Block";
+    call("get_issued_blocks_in_section", { section: recordSection }).then(blocks => {
+        renderPickList("record-block-box", blocks, {
+            placeholder: "Search blocks…",
+            getLabel: b => b.block,
+            onSelect: b => selectRecordBlock(b.block),
+            emptyText: "No issued blocks in this section.",
+        });
+    }).catch(err => { document.getElementById("record-block-box").innerHTML = `<div class="empty">${err.message || "Could not load. Please refresh."}</div>`; });
+}
+
+function selectRecordBlock(block) {
+    call("get_pending_plans_for_block", { block }).then(plans => {
+        const issued = (plans || []).filter(p => p.status === "Issued");
+        if (issued.length === 1) {
+            openPlanAction(issued[0], "record", () => navigate("record-block"));
+        } else if (issued.length > 1) {
+            navigate("record-plans");
+            renderPickList("record-plans-box", issued, {
+                placeholder: "Search products…",
+                getLabel: p => productName(p),
+                getSub: p => `${productCode(p)} · ${p.application_month} · ${p.total_kg_required} Kg`,
+                onSelect: p => openPlanAction(p, "record", () => navigate("record-plans")),
+                emptyText: "Nothing to record on this block.",
+            });
+        } else {
+            toast("Nothing ready to record on this block.");
+        }
+    });
+}
+
+window.addEventListener("load", () => {
+    renderBottomNav();
+    applySettings();
+    setTimeout(() => { navigate("home"); flushQueue(); updateSyncBadge(); }, 150);
+});
+</script>
+</body>
+</html>

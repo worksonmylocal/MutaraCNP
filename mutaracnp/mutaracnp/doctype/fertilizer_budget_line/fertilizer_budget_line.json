@@ -1,0 +1,103 @@
+{
+ "actions": [],
+ "creation": "2026-10-21 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "fertilizer_product",
+  "planned_quantity_kg",
+  "budgeted_unit_price",
+  "budgeted_total_cost",
+  "actual_quantity_kg",
+  "actual_unit_price",
+  "actual_total_cost",
+  "volume_variance",
+  "price_variance",
+  "total_variance"
+ ],
+ "fields": [
+  {
+   "fieldname": "fertilizer_product",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Fertilizer Item",
+   "options": "Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "planned_quantity_kg",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Planned Quantity (Kg)"
+  },
+  {
+   "fieldname": "budgeted_unit_price",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Budgeted Unit Price"
+  },
+  {
+   "fieldname": "budgeted_total_cost",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Budgeted Total Cost",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "actual_quantity_kg",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Actual Quantity (Kg)"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "actual_unit_price",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Actual Unit Price"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "actual_total_cost",
+   "fieldtype": "Currency",
+   "label": "Actual Total Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "volume_variance",
+   "fieldtype": "Currency",
+   "label": "Volume Variance",
+   "read_only": 1
+  },
+  {
+   "fieldname": "price_variance",
+   "fieldtype": "Currency",
+   "label": "Price Variance",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total_variance",
+   "fieldtype": "Currency",
+   "label": "Total Variance",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-10-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "MutaraCNP",
+ "name": "Fertilizer Budget Line",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

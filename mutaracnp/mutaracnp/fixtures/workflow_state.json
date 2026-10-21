@@ -1,0 +1,22 @@
+[
+ {
+  "doctype": "Workflow State",
+  "name": "Requested",
+  "workflow_state_name": "Requested"
+ },
+ {
+  "doctype": "Workflow State",
+  "name": "Approved",
+  "workflow_state_name": "Approved"
+ },
+ {
+  "doctype": "Workflow State",
+  "name": "Issued",
+  "workflow_state_name": "Issued"
+ },
+ {
+  "doctype": "Workflow State",
+  "name": "Rejected",
+  "workflow_state_name": "Rejected"
+ }
+]

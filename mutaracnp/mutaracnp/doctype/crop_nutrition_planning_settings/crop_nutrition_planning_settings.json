@@ -1,0 +1,84 @@
+{
+ "actions": [],
+ "creation": "2026-10-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "farm",
+  "section_break_cnps",
+  "upcoming_alert_days",
+  "variance_threshold_pct",
+  "require_programme_approval"
+ ],
+ "fields": [
+  {
+   "description": "Mutara's single farm record — kept for consistency with doctypes that link to CNP Farm.",
+   "fieldname": "farm",
+   "fieldtype": "Link",
+   "label": "Farm",
+   "options": "CNP Farm"
+  },
+  {
+   "fieldname": "section_break_cnps",
+   "fieldtype": "Section Break",
+   "label": "Alerts & Approval"
+  },
+  {
+   "default": "14",
+   "fieldname": "upcoming_alert_days",
+   "fieldtype": "Int",
+   "label": "Upcoming Application Alert (Days)"
+  },
+  {
+   "default": "15",
+   "fieldname": "variance_threshold_pct",
+   "fieldtype": "Percent",
+   "label": "Variance Alert Threshold %"
+  },
+  {
+   "default": "0",
+   "description": "When checked, a Fertilizer Programme must be approved by a Farm Manager before it can be submitted.",
+   "fieldname": "require_programme_approval",
+   "fieldtype": "Check",
+   "label": "Require Programme Approval"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-10-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "MutaraCNP",
+ "name": "Crop Nutrition Planning Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "CNP Agronomist",
+   "share": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Farm Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

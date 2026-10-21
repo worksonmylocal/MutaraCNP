@@ -1,0 +1,73 @@
+{
+ "actions": [],
+ "creation": "2026-10-21 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_pby",
+  "block",
+  "section",
+  "area_ha",
+  "tree_count",
+  "yield_kg_ha"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_pby",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "block",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Block",
+   "options": "Farm Block",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Section",
+   "options": "Section",
+   "read_only": 1
+  },
+  {
+   "fieldname": "area_ha",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Area (Ha)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "tree_count",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Tree Count"
+  },
+  {
+   "description": "This programme's working yield figure for the block — a projection until real harvest history exists.",
+   "fieldname": "yield_kg_ha",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Projected Yield (Kg/Ha)",
+   "reqd": 1
+  }
+ ],
+ "istable": 1,
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-10-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "MutaraCNP",
+ "name": "Programme Block Yield",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

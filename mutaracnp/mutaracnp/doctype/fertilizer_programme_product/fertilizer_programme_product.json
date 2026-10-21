@@ -1,0 +1,79 @@
+{
+ "actions": [],
+ "creation": "2026-10-21 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_fpp",
+  "product",
+  "fertilizer_item",
+  "item_name",
+  "available_qty",
+  "required_qty",
+  "shortfall"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_fpp",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "product",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Fertilizer Product",
+   "options": "Fertilizer Product",
+   "reqd": 1
+  },
+  {
+   "fieldname": "fertilizer_item",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Fertilizer Item",
+   "options": "Item"
+  },
+  {
+   "fetch_from": "fertilizer_item.item_name",
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Item Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "available_qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Available Qty"
+  },
+  {
+   "fieldname": "required_qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Required Qty"
+  },
+  {
+   "fieldname": "shortfall",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Shortfall",
+   "read_only": 1
+  }
+ ],
+ "istable": 1,
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-10-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "MutaraCNP",
+ "name": "Fertilizer Programme Product",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

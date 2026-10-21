@@ -1,0 +1,74 @@
+{
+ "actions": [],
+ "creation": "2026-10-21 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "nutrient",
+  "result_value",
+  "unit",
+  "normal_range_low",
+  "normal_range_high",
+  "status"
+ ],
+ "fields": [
+  {
+   "fieldname": "nutrient",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Nutrient",
+   "options": "N\nP\nK\nCa\nMg\nS\nMn\nB\nMo\nZn",
+   "reqd": 1
+  },
+  {
+   "fieldname": "result_value",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Result Value",
+   "reqd": 1
+  },
+  {
+   "fieldname": "unit",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Unit",
+   "options": "%\nppm"
+  },
+  {
+   "fieldname": "normal_range_low",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Normal Range Low"
+  },
+  {
+   "fieldname": "normal_range_high",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Normal Range High"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Deficient\nAdequate\nExcess",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-10-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "MutaraCNP",
+ "name": "Leaf Analysis Nutrient Result",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

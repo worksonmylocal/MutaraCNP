@@ -1,0 +1,57 @@
+{
+ "actions": [],
+ "creation": "2026-10-21 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_ps",
+  "fertilizer_product",
+  "application_month",
+  "percentage"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_ps",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "fertilizer_product",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Fertilizer Item (MOP/K2SO4)",
+   "options": "Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "application_month",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Application Month",
+   "options": "January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember",
+   "reqd": 1
+  },
+  {
+   "fieldname": "percentage",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "% of Annual Total",
+   "reqd": 1
+  }
+ ],
+ "istable": 1,
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-10-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "MutaraCNP",
+ "name": "Potassium Schedule",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
