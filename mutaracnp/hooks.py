@@ -84,6 +84,9 @@ doc_events = {
     "Leaf Analysis": {
         "validate": "mutaracnp.mutaracnp.utils.farm_scope.set_company_from_farm"
     },
+    "Soil Analysis": {
+        "validate": "mutaracnp.mutaracnp.utils.farm_scope.set_company_from_farm"
+    },
     "Production Calendar": {
         "validate": "mutaracnp.mutaracnp.utils.farm_scope.set_company_from_farm"
     },

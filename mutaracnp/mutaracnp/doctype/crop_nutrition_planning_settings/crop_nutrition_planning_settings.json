@@ -8,7 +8,9 @@
   "section_break_cnps",
   "upcoming_alert_days",
   "variance_threshold_pct",
-  "require_programme_approval"
+  "require_programme_approval",
+  "section_break_soil_buildup",
+  "soil_buildup_factors"
  ],
  "fields": [
   {
@@ -41,6 +43,17 @@
    "fieldname": "require_programme_approval",
    "fieldtype": "Check",
    "label": "Require Programme Approval"
+  },
+  {
+   "fieldname": "section_break_soil_buildup",
+   "fieldtype": "Section Break",
+   "label": "Soil Buildup Factors"
+  },
+  {
+   "description": "One buildup factor per nutrient, applied globally across crops when the calculation engine adjusts a fertilizer rate for soil test results. Editable here at any time — no code change needed to update a value.",
+   "fieldname": "soil_buildup_factors",
+   "fieldtype": "Table",
+   "options": "Soil Buildup Factor"
   }
  ],
  "index_web_pages_for_search": 1,

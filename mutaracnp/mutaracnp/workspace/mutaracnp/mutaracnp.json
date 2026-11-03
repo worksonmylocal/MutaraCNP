@@ -53,6 +53,16 @@
   {
    "hidden": 0,
    "is_query_report": 0,
+   "label": "Soil Analysis",
+   "link_count": 0,
+   "link_to": "Soil Analysis",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
    "label": "Production Calendar",
    "link_count": 0,
    "link_to": "Production Calendar",
@@ -150,6 +160,46 @@
    "label": "Crop",
    "link_count": 0,
    "link_to": "Crop",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Crop Nutrient Rule",
+   "link_count": 0,
+   "link_to": "Crop Nutrient Rule",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Leaf Analysis Norm",
+   "link_count": 0,
+   "link_to": "Leaf Analysis Norm",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Soil Analysis Norm",
+   "link_count": 0,
+   "link_to": "Soil Analysis Norm",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Crop Nutrition Planning Settings",
+   "link_count": 0,
+   "link_to": "Crop Nutrition Planning Settings",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"

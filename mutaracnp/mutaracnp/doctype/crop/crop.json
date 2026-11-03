@@ -15,9 +15,7 @@
   "compost_n_pct",
   "leaf_adjustment_pct",
   "section_break_yield_tiers",
-  "yield_tiers",
-  "section_break_nutrient_rules",
-  "nutrient_rules"
+  "yield_tiers"
  ],
  "fields": [
   {
@@ -79,21 +77,19 @@
    "fieldname": "yield_tiers",
    "fieldtype": "Table",
    "options": "Crop Yield Tier"
-  },
-  {
-   "fieldname": "section_break_nutrient_rules",
-   "fieldtype": "Section Break",
-   "label": "Nutrient Rules"
-  },
-  {
-   "fieldname": "nutrient_rules",
-   "fieldtype": "Table",
-   "options": "Crop Nutrient Rule"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
+ "links": [
+  {
+   "group": "Nutrient Rules",
+   "link_doctype": "Crop Nutrient Rule",
+   "link_fieldname": "crop",
+   "parent_doctype": "Crop",
+   "table_fieldname": ""
+  }
+ ],
  "modified": "2026-10-21 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "MutaraCNP",

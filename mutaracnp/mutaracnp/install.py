@@ -111,6 +111,17 @@ def seed_core_data():
 	if settings.variance_threshold_pct in (None, 0):
 		settings.variance_threshold_pct = 15
 		changed = True
+
+	# One Soil Buildup Factor row per nutrient, left at 0 until real soil
+	# sampling data is available - the row existing is what matters here, so
+	# the settings page is ready to edit rather than empty, without faking a
+	# number no one has supplied yet.
+	existing_nutrients = {row.nutrient for row in settings.soil_buildup_factors}
+	for nutrient in ["N", "P", "K", "Ca", "Mg", "S", "Mn", "B", "Mo", "Zn"]:
+		if nutrient not in existing_nutrients:
+			settings.append("soil_buildup_factors", {"nutrient": nutrient, "buildup_factor": 0})
+			changed = True
+
 	if changed:
 		settings.save(ignore_permissions=True)
 		print("MutaraCNP: configured Crop Nutrition Planning Settings")

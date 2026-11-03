@@ -1,0 +1,50 @@
+{
+ "actions": [],
+ "creation": "2026-11-03 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "nutrient",
+  "buildup_factor",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "nutrient",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Nutrient",
+   "options": "N\nP\nK\nCa\nMg\nS\nMn\nB\nMo\nZn",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "description": "How much to adjust this nutrient's fertilizer rate for soil test buildup, before leaf analysis adjustment is applied. Exact numbers to be supplied once soil sampling data is available.",
+   "fieldname": "buildup_factor",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Buildup Factor"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-11-03 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "MutaraCNP",
+ "name": "Soil Buildup Factor",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

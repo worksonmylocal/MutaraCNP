@@ -1,0 +1,186 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:SA-{section}-{yield_tier}",
+ "creation": "2026-11-03 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "amended_from",
+  "section",
+  "yield_tier",
+  "crop",
+  "farm",
+  "company",
+  "block",
+  "sampling_date",
+  "season",
+  "laboratory",
+  "report_reference",
+  "overall_assessment",
+  "nutrient_results",
+  "approved_by",
+  "approval_date"
+ ],
+ "fields": [
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Soil Analysis",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "description": "Soil Analysis is keyed by (Section, Yield Tier), not Block — mirrors Leaf Analysis, since soil sampling and nutrient response are managed at that grain.",
+   "fieldname": "section",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Section",
+   "options": "Section",
+   "reqd": 1
+  },
+  {
+   "fieldname": "yield_tier",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Yield Tier",
+   "reqd": 1
+  },
+  {
+   "fieldname": "crop",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Crop",
+   "options": "Crop",
+   "reqd": 1
+  },
+  {
+   "fieldname": "farm",
+   "fieldtype": "Link",
+   "label": "Farm",
+   "options": "CNP Farm",
+   "read_only": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "read_only": 1
+  },
+  {
+   "description": "Optional — informational only, since the real identity for this analysis is (Section, Yield Tier).",
+   "fieldname": "block",
+   "fieldtype": "Link",
+   "label": "Block (Informational)",
+   "options": "Farm Block"
+  },
+  {
+   "fieldname": "sampling_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Sampling Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "season",
+   "fieldtype": "Data",
+   "label": "Season"
+  },
+  {
+   "fieldname": "laboratory",
+   "fieldtype": "Data",
+   "label": "Laboratory"
+  },
+  {
+   "fieldname": "report_reference",
+   "fieldtype": "Data",
+   "label": "Report Reference"
+  },
+  {
+   "fieldname": "overall_assessment",
+   "fieldtype": "Text Editor",
+   "label": "Overall Assessment"
+  },
+  {
+   "fieldname": "nutrient_results",
+   "fieldtype": "Table",
+   "options": "Soil Analysis Nutrient Result"
+  },
+  {
+   "fieldname": "approved_by",
+   "fieldtype": "Link",
+   "label": "Approved By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "approval_date",
+   "fieldtype": "Date",
+   "label": "Approval Date",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-11-03 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "MutaraCNP",
+ "name": "Soil Analysis",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "CNP Agronomist",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Farm Manager"
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "General Manager"
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
