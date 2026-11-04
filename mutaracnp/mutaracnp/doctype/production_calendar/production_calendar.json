@@ -14,8 +14,7 @@
   "section_break_pc_events",
   "calendar_events",
   "section_break_pc_fert",
-  "fertilizer_schedule",
-  "potassium_schedule"
+  "fertilizer_schedule"
  ],
  "fields": [
   {
@@ -69,11 +68,6 @@
    "fieldname": "fertilizer_schedule",
    "fieldtype": "Table",
    "options": "Fertilizer Schedule"
-  },
-  {
-   "fieldname": "potassium_schedule",
-   "fieldtype": "Table",
-   "options": "Potassium Schedule"
   }
  ],
  "grid_page_length": 50,

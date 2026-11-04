@@ -6,7 +6,7 @@
  "engine": "InnoDB",
  "field_order": [
   "section_break_fs",
-  "nutrient",
+  "fertilizer_product",
   "application_month",
   "percentage"
  ],
@@ -16,12 +16,12 @@
    "fieldtype": "Section Break"
   },
   {
-   "description": "K is scheduled separately via Potassium Schedule since it has interchangeable product sources.",
-   "fieldname": "nutrient",
-   "fieldtype": "Select",
+   "description": "Keyed by the actual fertilizer Item, not nutrient - this is how the calculation engine splits each product's annual total across the year, including potassium sources like MOP/K2SO4, which just get their own rows here.",
+   "fieldname": "fertilizer_product",
+   "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Nutrient",
-   "options": "N\nP\nCa\nMg\nS\nMn\nB\nMo\nZn",
+   "label": "Fertilizer Item",
+   "options": "Item",
    "reqd": 1
   },
   {

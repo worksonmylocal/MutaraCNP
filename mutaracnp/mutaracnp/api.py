@@ -8,17 +8,18 @@ record already belongs to the one CNP Farm, so there's nothing to scope
 between. A few functions keep a `farm=None` parameter for call-site
 compatibility with ported frontend code; it is accepted and ignored.
 
-The nutrient-rate calculation engine is a deferred follow-up phase (there is
-no utils/calculation_engine.py yet). The handful of endpoints that would
-depend on it - desk_calculate, desk_get_rate_grid, desk_save_rates,
-export_programme_excel, get_yield_tier_distribution - are stubbed below so
-the Agronomist Desk still renders and navigates.
+The nutrient-rate calculation engine (utils/calculation_engine.py) now exists
+and desk_calculate / get_yield_tier_distribution call into it for real.
+desk_get_rate_grid, desk_save_rates and export_programme_excel remain
+stubbed - they're a manual block-by-block rate override layer on top of the
+engine's own output, a separate feature the engine itself doesn't need.
 """
 
 import frappe
 from frappe.utils import cint, flt, now_datetime, today, getdate, date_diff
 
 from mutaracnp.mutaracnp.utils.integration import get_grouped_sum, get_farm_warehouse, get_stock_qty
+from mutaracnp.mutaracnp.utils.calculation_engine import calculate_programme, get_yield_tier
 
 MONTHS = ["January", "February", "March", "April", "May", "June",
           "July", "August", "September", "October", "November", "December"]
@@ -876,9 +877,27 @@ def get_manager_kpis(season=None, farm=None):
 
 @frappe.whitelist()
 def get_yield_tier_distribution(season=None, farm=None):
-	"""Blocked on the calculation engine (yield-tier classification lives
-	there) - returns an empty series rather than erroring."""
-	return []
+	filters = {}
+	if season and season != "All Seasons":
+		filters["season"] = season
+	programmes = frappe.get_all("Fertilizer Programme", filters=filters, fields=["name", "crop"])
+
+	counts = {}
+	crop_cache = {}
+	for p in programmes:
+		if p.crop not in crop_cache:
+			crop_cache[p.crop] = frappe.get_doc("Crop", p.crop)
+		crop_doc = crop_cache[p.crop]
+
+		rows = frappe.get_all("Programme Block Yield", filters={"parent": p.name}, fields=["yield_kg_ha"])
+		for row in rows:
+			try:
+				tier_label, _ = get_yield_tier(crop_doc, row.yield_kg_ha)
+			except Exception:
+				continue
+			counts[tier_label] = counts.get(tier_label, 0) + 1
+
+	return [{"tier": tier, "count": count} for tier, count in counts.items()]
 
 
 @frappe.whitelist()
@@ -1241,9 +1260,9 @@ def load_programme_products(programme):
 	if doc.docstatus == 1:
 		frappe.throw("Cannot change products on a submitted programme.")
 
-	crop = frappe.get_doc("Crop", doc.crop)
+	nutrient_rules = frappe.get_all("Crop Nutrient Rule", filters={"crop": doc.crop}, fields=["fertilizer_product"])
 	products, seen = [], set()
-	for rule in crop.get("nutrient_rules", []):
+	for rule in nutrient_rules:
 		if rule.fertilizer_product and rule.fertilizer_product not in seen:
 			seen.add(rule.fertilizer_product)
 			products.append(rule.fertilizer_product)
@@ -1270,10 +1289,15 @@ def load_programme_products(programme):
 @frappe.whitelist()
 def get_product_choices(programme, product):
 	doc = frappe.get_doc("Fertilizer Programme", programme)
-	crop = frappe.get_doc("Crop", doc.crop)
+	nutrient_rules = frappe.get_all(
+		"Crop Nutrient Rule",
+		filters={"crop": doc.crop},
+		fields=["fertilizer_product", "nutrient", "rate_per_tonne", "bag_weight_kg",
+				"product_nutrient_pct", "apply_compost_netting", "nutrient_source_group"],
+	)
 
 	rule = None
-	for row in crop.get("nutrient_rules", []):
+	for row in nutrient_rules:
 		if row.fertilizer_product == product:
 			rule = {
 				"nutrient": row.nutrient, "rate_per_tonne": row.rate_per_tonne,
@@ -1494,12 +1518,14 @@ def desk_pull_blocks(programme):
 
 @frappe.whitelist()
 def desk_calculate(programme):
-	"""The nutrient-rate calculation engine hasn't been built yet."""
-	return CALC_ENGINE_PENDING
+	lines = calculate_programme(programme)
+	return {"lines": lines}
 
 
 @frappe.whitelist()
 def desk_get_rate_grid(programme):
+	"""The manual block-by-block rate override grid is a separate feature on
+	top of the engine's own output - not built yet."""
 	return CALC_ENGINE_PENDING
 
 

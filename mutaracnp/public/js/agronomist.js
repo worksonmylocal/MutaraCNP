@@ -437,8 +437,8 @@
     },
     block: {
       doctype: "Farm Block", title: "Farm Block", icon: "🧱", tint: "rgba(100,116,139,.15)", colour: "#64748b",
-      sub: "Area, trees and last year's yield - what the whole calculation rests on.",
-      list: ["name", "section", "area_ha", "tree_count", "previous_year_yield_kg_ha"],
+      sub: "Area, trees and projected yield - what the whole calculation rests on.",
+      list: ["name", "section", "area_ha", "tree_count", "projected_yield_kg_ha"],
       fields: [
         { name: "block_name", label: "Block Name", reqd: 1 },
         { name: "block_number", label: "Block Number" },
@@ -447,8 +447,8 @@
         { name: "crop", label: "Crop", type: "link", doctype: "Crop" },
         { name: "area_ha", label: "Area (Ha)", type: "float", reqd: 1 },
         { name: "tree_count", label: "Tree Count", type: "int", reqd: 1 },
-        { name: "previous_year_yield_kg_ha", label: "Last Year Yield (Kg/Ha)", type: "float",
-          help: "Decides the block's yield tier." },
+        { name: "projected_yield_kg_ha", label: "Projected Yield (Kg/Ha)", type: "float",
+          help: "Decides the block's yield tier - a projection, since Mutara has no harvest history yet." },
         { name: "planting_year", label: "Planting Year", type: "int" },
       ],
     },
@@ -472,16 +472,23 @@
           { name: "max_yield_kg_ha", label: "Max Kg/Ha", type: "float" },
           { name: "sort_order", label: "Order", type: "int" },
         ] },
-        { name: "nutrient_rules", label: "Nutrient Rules", fields: [
-          { name: "product", label: "Product", type: "link", doctype: "Fertilizer Product" },
-          { name: "fertilizer_product", label: "Fallback Item", type: "link", doctype: "Item" },
-          { name: "nutrient", label: "Nutrient", type: "select", options: ["N","P","K","Ca","Mg","S","Mn","B","Mo","Zn"] },
-          { name: "rate_per_tonne", label: "Rate/Tonne", type: "float" },
-          { name: "bag_weight_kg", label: "Bag Kg", type: "float" },
-          { name: "product_nutrient_pct", label: "Nutrient %", type: "float" },
-          { name: "apply_compost_netting", label: "Net Compost", type: "check" },
-          { name: "nutrient_source_group", label: "Source Group" },
-        ] },
+      ],
+    },
+    rule: {
+      doctype: "Crop Nutrient Rule", title: "Crop Nutrient Rule", icon: "🧮",
+      tint: "rgba(16,185,129,.13)", colour: "#059669",
+      sub: "Nutrient removal/rate factors per crop - the engine's core dosing math.",
+      list: ["name", "crop", "nutrient", "fertilizer_product", "rate_per_tonne"],
+      fields: [
+        { name: "crop", label: "Crop", type: "link", doctype: "Crop", reqd: 1 },
+        { name: "fertilizer_product", label: "Fertilizer Item", type: "link", doctype: "Item", reqd: 1 },
+        { name: "nutrient", label: "Nutrient", type: "select", options: ["N","P","K","Ca","Mg","S","Mn","B","Mo","Zn"], reqd: 1 },
+        { name: "rate_per_tonne", label: "Rate/Tonne", type: "float" },
+        { name: "bag_weight_kg", label: "Bag Kg", type: "float" },
+        { name: "product_nutrient_pct", label: "Nutrient %", type: "float" },
+        { name: "apply_compost_netting", label: "Net Compost", type: "check" },
+        { name: "nutrient_source_group", label: "Source Group",
+          help: "Groups interchangeable sources for the same nutrient, e.g. MOP+K2SO4 as alternate K sources." },
       ],
     },
     product: {
@@ -512,19 +519,11 @@
       ],
       tables: [
         { name: "fertilizer_schedule", label: "Fertilizer Schedule",
-          help: "By nutrient, not by Item - Potassium isn't set here, it has its own Potassium Schedule below.",
+          help: "By fertilizer Item, not nutrient - MOP and K2SO4 just get their own rows here like any other product.",
           fields: [
-          { name: "nutrient", label: "Nutrient", type: "select",
-            options: ["N","P","Ca","Mg","S","Mn","B","Mo","Zn"] },
+          { name: "fertilizer_product", label: "Fertilizer Item", type: "link", doctype: "Item" },
           { name: "application_month", label: "Month", type: "select", options: ["January","February","March","April","May","June","July","August","September","October","November","December"] },
-          { name: "percentage", label: "%", type: "float" },
-        ] },
-        { name: "potassium_schedule", label: "Potassium Schedule",
-          help: "Both MOP and K2SO4 are always applied in full - this just decides which one supplies which round, and how much of that product's own total. E.g. round 1: 40% MOP, round 2: 20% K2SO4, round 3: 40% MOP.",
-          fields: [
-          { name: "fertilizer_product", label: "MOP or K2SO4", type: "link", doctype: "Item" },
-          { name: "application_month", label: "Month", type: "select", options: ["January","February","March","April","May","June","July","August","September","October","November","December"] },
-          { name: "percentage", label: "% of that product's own total", type: "float" },
+          { name: "percentage", label: "% of Annual Total", type: "float" },
         ] },
       ],
     },
@@ -563,15 +562,59 @@
         { name: "unit", label: "Unit", type: "select", options: ["%", "ppm"] },
       ],
     },
+    soil: {
+      doctype: "Soil Analysis", title: "Soil Analysis", icon: "🪨",
+      tint: "rgba(120,113,108,.15)", colour: "#78716c",
+      sub: "Lab results per section, which build up or draw down the calculated rates.",
+      list: ["name", "section", "sampling_date", "yield_tier"],
+      fields: [
+        { name: "section", label: "Section", type: "link", doctype: "Section", reqd: 1 },
+        { name: "farm", label: "Farm", type: "link", doctype: "CNP Farm" },
+        { name: "crop", label: "Crop", type: "link", doctype: "Crop" },
+        { name: "block", label: "Block", type: "link", doctype: "Farm Block" },
+        { name: "sampling_date", label: "Sampling Date", type: "date" },
+        { name: "season", label: "Season" },
+      ],
+      tables: [
+        { name: "nutrient_results", label: "Nutrient Results", fields: [
+          { name: "nutrient", label: "Nutrient", type: "select", options: ["N","P","K","Ca","Mg","S","Mn","B","Mo","Zn"] },
+          { name: "result_value", label: "Result", type: "float" },
+          { name: "unit", label: "Unit", type: "select", options: ["%", "ppm", "me%", "mg/kg"] },
+        ] },
+      ],
+    },
+    soilnorm: {
+      doctype: "Soil Analysis Norm", title: "Soil Analysis Norm", icon: "📐",
+      tint: "rgba(120,113,108,.15)", colour: "#78716c",
+      sub: "The healthy soil range per nutrient. A result outside it moves the rate.",
+      list: ["name", "crop", "nutrient", "low", "high", "midpoint"],
+      fields: [
+        { name: "crop", label: "Crop", type: "link", doctype: "Crop", reqd: 1 },
+        { name: "nutrient", label: "Nutrient", type: "select", options: ["N","P","K","Ca","Mg","S","Mn","B","Mo","Zn"], reqd: 1 },
+        { name: "low", label: "Low", type: "float" },
+        { name: "high", label: "High", type: "float" },
+        { name: "midpoint", label: "Midpoint", type: "float" },
+        { name: "unit", label: "Unit", type: "select", options: ["%", "ppm", "me%", "mg/kg"] },
+      ],
+    },
     settings: {
       doctype: "Crop Nutrition Planning Settings", single: true,
       title: "Module Settings", icon: "⚙", tint: "rgba(100,116,139,.15)", colour: "#64748b",
-      sub: "Module-wide defaults.",
+      sub: "Module-wide defaults, including the soil buildup factors below.",
       fields: [
         { name: "upcoming_alert_days", label: "Alert Days Before Application", type: "int" },
         { name: "variance_threshold_pct", label: "Variance Alert Threshold (%)", type: "int" },
         { name: "require_programme_approval", label: "Require Programme Approval", type: "check",
           help: "Off: you submit the programme and it takes effect. On: it goes to the consultant, then the farm manager." },
+      ],
+      tables: [
+        { name: "soil_buildup_factors", label: "Soil Buildup Factors",
+          help: "One factor per nutrient, applied globally across crops when a soil test is below/above its norm.",
+          fields: [
+          { name: "nutrient", label: "Nutrient", type: "select", options: ["N","P","K","Ca","Mg","S","Mn","B","Mo","Zn"] },
+          { name: "buildup_factor", label: "Buildup Factor", type: "float" },
+          { name: "notes", label: "Notes" },
+        ] },
       ],
     },
   };
@@ -1886,8 +1929,8 @@
   /* The master-data grid. Order is the order someone sets a farm up in:
    * where it is, how it is divided, what grows there, what feeds it, when,
    * and what the lab said. */
-  const SETUP_ORDER = ["farm", "section", "block", "crop", "product",
-                       "calendar", "leaf", "norm", "settings"];
+  const SETUP_ORDER = ["farm", "section", "block", "crop", "rule", "product",
+                       "calendar", "leaf", "norm", "soil", "soilnorm", "settings"];
 
   function renderSetup() {
     const grid = $("#setup-grid");

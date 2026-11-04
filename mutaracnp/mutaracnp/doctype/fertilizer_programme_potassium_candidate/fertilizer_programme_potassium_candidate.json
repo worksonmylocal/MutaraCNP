@@ -1,0 +1,89 @@
+{
+ "actions": [],
+ "creation": "2026-11-04 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_fppc",
+  "section",
+  "yield_tier",
+  "fertilizer_product",
+  "nutrient",
+  "column_break_fppc",
+  "product_kg_per_ha",
+  "total_product_kg",
+  "is_selected"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_fppc",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Section",
+   "options": "Section"
+  },
+  {
+   "fieldname": "yield_tier",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Yield Tier"
+  },
+  {
+   "fieldname": "fertilizer_product",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Fertilizer Product",
+   "options": "Item"
+  },
+  {
+   "fieldname": "nutrient",
+   "fieldtype": "Data",
+   "label": "Nutrient"
+  },
+  {
+   "fieldname": "column_break_fppc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "product_kg_per_ha",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Product (Kg/Ha)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_product_kg",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Total Product (Kg)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "is_selected",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Selected",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-11-04 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "MutaraCNP",
+ "name": "Fertilizer Programme Potassium Candidate",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

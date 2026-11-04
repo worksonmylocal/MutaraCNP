@@ -20,10 +20,13 @@
   "period_type",
   "start_month",
   "end_month",
+  "potassium_source",
   "section_break_fp_yield",
   "block_yield_data",
   "section_break_fp_lines",
   "programme_lines",
+  "section_break_fp_potassium",
+  "potassium_candidates",
   "section_break_fp_products",
   "product_selections",
   "section_break_fp_approval",
@@ -127,6 +130,13 @@
    "options": "January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember"
   },
   {
+   "description": "Which of the crop's alternative potassium products (e.g. MOP vs K2SO4) actually feeds into the plan. Both are always computed, for comparison, in Potassium Source Comparison below.",
+   "fieldname": "potassium_source",
+   "fieldtype": "Link",
+   "label": "Potassium Source",
+   "options": "Item"
+  },
+  {
    "fieldname": "section_break_fp_yield",
    "fieldtype": "Section Break",
    "label": "Block Yield Data"
@@ -145,6 +155,16 @@
    "fieldname": "programme_lines",
    "fieldtype": "Table",
    "options": "Fertilizer Programme Line"
+  },
+  {
+   "fieldname": "section_break_fp_potassium",
+   "fieldtype": "Section Break",
+   "label": "Potassium Source Comparison"
+  },
+  {
+   "fieldname": "potassium_candidates",
+   "fieldtype": "Table",
+   "options": "Fertilizer Programme Potassium Candidate"
   },
   {
    "fieldname": "section_break_fp_products",

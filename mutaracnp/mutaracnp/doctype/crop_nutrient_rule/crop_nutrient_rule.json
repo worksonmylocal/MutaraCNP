@@ -27,12 +27,13 @@
    "reqd": 1
   },
   {
+   "description": "The real stock Item this rule's rate applies to - the calculation engine writes this value straight through into Programme Lines and Block Fertilizer Plans, both of which link to Item directly.",
    "fieldname": "fertilizer_product",
    "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Fertilizer Product",
-   "options": "Fertilizer Product",
+   "label": "Fertilizer Item",
+   "options": "Item",
    "reqd": 1
   },
   {

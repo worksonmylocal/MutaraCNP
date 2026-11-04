@@ -70,7 +70,7 @@ def get_bag_sizes(crop):
         return {}
     rows = frappe.get_all(
         "Crop Nutrient Rule",
-        filters={"parent": crop, "parenttype": "Crop"},
+        filters={"crop": crop},
         fields=["fertilizer_product", "bag_weight_kg"],
     )
     return {r.fertilizer_product: flt(r.bag_weight_kg) for r in rows if r.bag_weight_kg}
