@@ -603,8 +603,6 @@
       fields: [
         { name: "upcoming_alert_days", label: "Alert Days Before Application", type: "int" },
         { name: "variance_threshold_pct", label: "Variance Alert Threshold (%)", type: "int" },
-        { name: "require_programme_approval", label: "Require Programme Approval", type: "check",
-          help: "Off: you submit the programme and it takes effect. On: it goes to the consultant, then the farm manager." },
       ],
       tables: [
         { name: "soil_buildup_factors", label: "Soil Buildup Factors",
@@ -925,19 +923,6 @@
       </div>
       <div class="steps">${steps}</div>
       ${a.blocked ? `<div class="none">${esc(a.blocked)}</div>` : ""}
-      ${a.sign_off ? `
-      <div class="card__head" style="margin:18px 0 10px"><h3>Approved</h3></div>
-      <div class="signoff">
-        ${[
-          ["elvis_koskey", "Elvis Koskey", "General Manager"],
-          ["bramuel", "Bramuel", "Farm Manager"],
-          ["richard_collins", "Richard Collins", "Consultant"],
-        ].map(([key, name, role]) => `
-          <label class="signoff__item${a.sign_off[key] ? " signoff__item--on" : ""}">
-            <input type="checkbox" data-signoff="${key}" ${a.sign_off[key] ? "checked" : ""}>
-            <span class="signoff__mark">✓</span>${esc(name)} — ${esc(role)}
-          </label>`).join("")}
-      </div>` : ""}
       <div class="btnrow">
         <button class="btn" data-edit-prog="${esc(c.name)}">Edit details</button>
         <button class="btn" data-act="pull_blocks" ${a.editable ? "" : "disabled"}>Pull blocks</button>
@@ -1668,28 +1653,6 @@
     }
   }
 
-  /** A sign-off box - ticked immediately, no Save step, since the whole
-   *  point is that both people can see it change the moment it happens.
-   *
-   * Only patches this one programme's actions from the response and
-   * re-renders the programme panel - a full load() re-fetches farms,
-   * seasons, home metrics and the whole programmes list, which is why this
-   * used to take noticeably long for a single checkbox. */
-  async function toggleSignOff(input) {
-    const c = state.data && state.data.current;
-    if (!c) return;
-    input.disabled = true;
-    try {
-      c.actions = await call("desk_set_sign_off",
-        { programme: c.name, who: input.dataset.signoff, value: input.checked ? 1 : 0 });
-      renderProgramme(state.data);
-    } catch (e) {
-      input.checked = !input.checked;
-      input.disabled = false;
-      if (!e.handled) toast(e.message, "bad");
-    }
-  }
-
   /** A yes/no confirmation, styled like everything else here instead of a
    *  bare browser confirm(). Resolves true only if Delete was clicked. */
   function confirmModal(title, message) {
@@ -2021,11 +1984,6 @@
       if (ap) return openApplication(Number(ap.dataset.app));
       const sv = e.target.closest("[data-section]");
       if (sv) return openSectionVariance(sv.dataset.section);
-    });
-
-    document.addEventListener("change", (e) => {
-      const so = e.target.closest("[data-signoff]");
-      if (so) return toggleSignOff(so);
     });
 
     load().catch(() => {});

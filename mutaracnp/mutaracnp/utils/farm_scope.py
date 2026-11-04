@@ -22,6 +22,13 @@ def set_farm_from_block(doc, method=None):
 				doc.section = info.section
 
 
+def set_farm_from_section(doc, method=None):
+	"""doc_events target for Farm Block, whose `farm` is read-only - it
+	follows the block's Section rather than being typed in."""
+	if doc.get("section"):
+		doc.farm = frappe.db.get_value("Section", doc.section, "farm")
+
+
 def set_farm_from_programme(doc, method=None):
 	"""doc_events target for doctypes carrying a `fertilizer_programme` link
 	(Fertilizer Budget)."""

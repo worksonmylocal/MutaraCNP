@@ -28,10 +28,7 @@
   "section_break_fp_potassium",
   "potassium_candidates",
   "section_break_fp_products",
-  "product_selections",
-  "section_break_fp_approval",
-  "approved_by_agronomist",
-  "approved_by_manager"
+  "product_selections"
  ],
  "fields": [
   {
@@ -175,23 +172,6 @@
    "fieldname": "product_selections",
    "fieldtype": "Table",
    "options": "Fertilizer Programme Product"
-  },
-  {
-   "fieldname": "section_break_fp_approval",
-   "fieldtype": "Section Break",
-   "label": "Approval"
-  },
-  {
-   "fieldname": "approved_by_agronomist",
-   "fieldtype": "Check",
-   "label": "Approved by Agronomist",
-   "read_only": 1
-  },
-  {
-   "fieldname": "approved_by_manager",
-   "fieldtype": "Check",
-   "label": "Approved by Farm Manager",
-   "read_only": 1
   }
  ],
  "grid_page_length": 50,

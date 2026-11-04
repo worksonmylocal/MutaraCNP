@@ -199,19 +199,6 @@ a{color:inherit}
 .step__tick{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;background:rgba(10,10,10,0.06);color:var(--ink-faint);border:1px solid rgba(10,10,10,.08);transition:all .2s}
 .step__tick.on{background:#16a34a;color:#fff;border-color:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,.18)}
 .step__label{font:500 13.5px var(--sans);color:var(--ink-3)}
-/* Each sign-off is its own pill, styled exactly like .btn below, so
-   "Approved" reads as the same kind of control as the rest of the row
-   instead of a plain checkbox list. */
-.signoff{display:flex;gap:8px;flex-wrap:wrap}
-.signoff__item{position:relative;display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;
-  font:600 12.5px var(--sans);padding:9px 16px;cursor:pointer;background:rgba(10,10,10,0.05);color:var(--ink-3);
-  transition:all .18s;white-space:nowrap}
-.signoff__item:hover{background:rgba(10,10,10,0.10);color:var(--ink)}
-.signoff__item--on{background:var(--good-bg);color:var(--good)}
-.signoff__item input[type=checkbox]{position:absolute;width:0;height:0;opacity:0}
-.signoff__mark{width:16px;height:16px;border-radius:50%;flex:none;display:grid;place-items:center;
-  font-size:10px;font-weight:800;background:rgba(10,10,10,0.08);color:transparent;transition:all .18s}
-.signoff__item--on .signoff__mark{background:var(--good);color:#fff}
 .step__detail{font-size:12px;color:var(--ink-mute);margin-top:1px}
 
 /* Buttons used inside cards and queue rows */

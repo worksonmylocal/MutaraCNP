@@ -76,7 +76,10 @@ doc_events = {
         ]
     },
     "Farm Block": {
-        "validate": "mutaracnp.mutaracnp.utils.farm_scope.set_company_from_farm"
+        "validate": [
+            "mutaracnp.mutaracnp.utils.farm_scope.set_farm_from_section",
+            "mutaracnp.mutaracnp.utils.farm_scope.set_company_from_farm",
+        ]
     },
     "Fertilizer Programme": {
         "validate": "mutaracnp.mutaracnp.utils.farm_scope.set_company_from_farm"

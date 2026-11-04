@@ -8,7 +8,6 @@
   "section_break_cnps",
   "upcoming_alert_days",
   "variance_threshold_pct",
-  "require_programme_approval",
   "section_break_soil_buildup",
   "soil_buildup_factors"
  ],
@@ -36,13 +35,6 @@
    "fieldname": "variance_threshold_pct",
    "fieldtype": "Percent",
    "label": "Variance Alert Threshold %"
-  },
-  {
-   "default": "0",
-   "description": "When checked, a Fertilizer Programme must be approved by a Farm Manager before it can be submitted.",
-   "fieldname": "require_programme_approval",
-   "fieldtype": "Check",
-   "label": "Require Programme Approval"
   },
   {
    "fieldname": "section_break_soil_buildup",

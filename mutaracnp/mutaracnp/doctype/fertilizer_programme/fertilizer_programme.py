@@ -10,21 +10,39 @@ class FertilizerProgramme(Document):
 	def on_cancel(self):
 		self.cancel_block_fertilizer_plans()
 
-	@frappe.whitelist()
-	def pull_blocks_from_farm(self):
-		"""Populate block_yield_data from every active Farm Block under this
-		programme's Farm - the single source of truth for area/tree_count/
-		section, replacing manual re-entry. Yield comes from the block's
-		projected yield, not a previous year's actual, since Mutara has no
-		harvest history yet."""
+	def get_scoped_blocks(self):
+		"""The Farm Blocks this programme covers: the farm's blocks for its
+		crop, narrowed to one Section or one Block when Scope Type says so."""
 		if not self.farm:
 			frappe.throw("Please set the Farm first.")
 
-		blocks = frappe.get_all(
+		filters = {"farm": self.farm}
+		if self.crop:
+			filters["crop"] = self.crop
+		if self.scope_type == "Section":
+			if not self.scope_section:
+				frappe.throw("Scope Type is Section - choose the Section first.")
+			filters["section"] = self.scope_section
+		elif self.scope_type == "Block":
+			if not self.scope_block:
+				frappe.throw("Scope Type is Block - choose the Block first.")
+			filters["name"] = self.scope_block
+
+		return frappe.get_all(
 			"Farm Block",
-			filters={"farm": self.farm},
+			filters=filters,
 			fields=["name", "section", "area_ha", "tree_count", "projected_yield_kg_ha"],
+			order_by="name asc",
 		)
+
+	@frappe.whitelist()
+	def pull_blocks_from_farm(self):
+		"""Populate block_yield_data from the Farm Blocks in this programme's
+		scope - the single source of truth for area/tree_count/section,
+		replacing manual re-entry. Yield comes from the block's projected
+		yield, not a previous year's actual, since Mutara has no harvest
+		history yet."""
+		blocks = self.get_scoped_blocks()
 
 		self.set("block_yield_data", [])
 		for block in blocks:

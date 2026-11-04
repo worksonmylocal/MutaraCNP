@@ -1407,7 +1407,7 @@ def get_agronomist_desk(season=None, farm=None):
 
 	fields = ["name", "season", "farm", "crop", "docstatus",
 	          "period_type", "start_month", "end_month",
-	          "production_calendar", "modified", "approved_by_agronomist", "approved_by_manager"]
+	          "production_calendar", "modified"]
 	programmes = frappe.get_all("Fertilizer Programme", filters=prog_filter, fields=fields,
 	                             order_by="modified desc", limit_page_length=20)
 
@@ -1477,19 +1477,13 @@ def _programme_actions(doc):
 	]
 
 	nxt = next((s["key"] for s in steps if not s["done"]), None)
-	settings = frappe.get_cached_doc("Crop Nutrition Planning Settings")
-	needs_approval = cint(settings.require_programme_approval)
-	signed_off = bool(doc.approved_by_agronomist) and (not needs_approval or bool(doc.approved_by_manager))
-	ready = all(s["done"] for s in steps) and signed_off
+	# No approval chain on Mutara - a calculated programme submits directly.
+	# Product/item choice is a stock check that doesn't feed the calculation,
+	# so it's shown as a step but doesn't hold up submission.
+	ready = blocks > 0 and lines > 0
 
 	return {
 		"editable": True, "steps": steps, "next": nxt,
-		"sign_off": {
-			"agronomist": bool(doc.approved_by_agronomist),
-			"manager": bool(doc.approved_by_manager),
-			"requires_manager": bool(needs_approval),
-			"done": signed_off,
-		},
 		"ready_to_send": ready,
 		"blocked": None,
 	}
@@ -1497,23 +1491,11 @@ def _programme_actions(doc):
 
 @frappe.whitelist()
 def desk_pull_blocks(programme):
-	"""Pull the farm's blocks for this programme's crop onto it."""
+	"""Pull the blocks in this programme's scope onto it."""
 	doc = frappe.get_doc("Fertilizer Programme", programme)
 	if doc.docstatus != 0:
 		frappe.throw("Only a Draft programme's blocks can be pulled.")
-
-	block_filter = {"crop": doc.crop} if doc.crop else {}
-	blocks = frappe.get_all("Farm Block", filters=block_filter,
-	                         fields=["name", "section", "area_ha", "tree_count", "projected_yield_kg_ha"])
-
-	doc.set("block_yield_data", [])
-	for b in blocks:
-		doc.append("block_yield_data", {
-			"block": b.name, "section": b.section, "area_ha": b.area_ha,
-			"tree_count": b.tree_count, "yield_kg_ha": b.projected_yield_kg_ha,
-		})
-	doc.save()
-	return {"blocks": len(blocks)}
+	return {"blocks": doc.pull_blocks_from_farm()}
 
 
 @frappe.whitelist()
@@ -1540,23 +1522,6 @@ def export_programme_excel(programme, section=None):
 
 
 @frappe.whitelist()
-def desk_set_sign_off(programme, who, value):
-	"""Tick or clear one of the two sign-off boxes. `who` is never trusted as
-	a raw fieldname."""
-	fieldname = {"agronomist": "approved_by_agronomist", "manager": "approved_by_manager"}.get(who)
-	if not fieldname:
-		frappe.throw(f"Unknown sign-off: {who}")
-
-	doc = frappe.get_doc("Fertilizer Programme", programme)
-	doc.check_permission("write")
-	if doc.docstatus != 0:
-		frappe.throw("This programme is no longer a draft.")
-	doc.db_set(fieldname, 1 if cint(value) else 0, update_modified=False)
-	doc.reload()
-	return _programme_actions(doc)
-
-
-@frappe.whitelist()
 def desk_delete_draft(programme):
 	doc = frappe.get_doc("Fertilizer Programme", programme)
 	doc.check_permission("delete")
@@ -1564,22 +1529,6 @@ def desk_delete_draft(programme):
 		frappe.throw("Only a Draft programme can be deleted this way - cancel a submitted one first.")
 	frappe.delete_doc("Fertilizer Programme", programme, ignore_permissions=True)
 	return {"deleted": programme}
-
-
-@frappe.whitelist()
-def desk_send_for_review(programme):
-	"""Mark a finished draft as agronomist-signed-off. There's no Workflow
-	for Fertilizer Programme (single farm, no per-farm approval chain to
-	generate) - approval is the `approved_by_agronomist`/`approved_by_manager`
-	Check fields plus the doctype's own Submit permission (only Farm Manager
-	and CNP Agronomist/System Manager roles can submit)."""
-	doc = frappe.get_doc("Fertilizer Programme", programme)
-	doc.check_permission("write")
-	if doc.docstatus != 0:
-		frappe.throw("This programme is no longer a draft.")
-	doc.db_set("approved_by_agronomist", 1, update_modified=False)
-	doc.reload()
-	return _programme_actions(doc)
 
 
 @frappe.whitelist()
@@ -1604,15 +1553,13 @@ def get_plan_queue(season=None, farm=None, limit=200):
 
 @frappe.whitelist()
 def desk_submit_programme(programme):
-	"""Submit the programme - on_submit creates the Block Fertilizer Plans
-	once the calculation engine exists. For now this only flips docstatus;
-	downstream plan creation is implemented alongside the calc engine."""
+	"""Submit the programme directly - on_submit creates its Block
+	Fertilizer Plans."""
 	doc = frappe.get_doc("Fertilizer Programme", programme)
 	if doc.docstatus == 1:
 		return {"docstatus": 1, "already": True}
-	settings = frappe.get_cached_doc("Crop Nutrition Planning Settings")
-	if cint(settings.require_programme_approval) and not doc.approved_by_manager:
-		frappe.throw("This programme needs Farm Manager approval before it can be submitted.")
+	if not doc.get("programme_lines"):
+		frappe.throw("Run the calculation before submitting - there are no programme lines yet.")
 	doc.submit()
 	doc.reload()
 	return {"docstatus": doc.docstatus}
