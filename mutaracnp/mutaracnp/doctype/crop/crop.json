@@ -85,9 +85,7 @@
   {
    "group": "Nutrient Rules",
    "link_doctype": "Crop Nutrient Rule",
-   "link_fieldname": "crop",
-   "parent_doctype": "Crop",
-   "table_fieldname": ""
+   "link_fieldname": "crop"
   }
  ],
  "modified": "2026-10-21 00:00:00.000000",
