@@ -2,6 +2,7 @@ import frappe
 
 
 def after_install():
+	sync_app_fixtures()
 	create_roles()
 	create_material_request_custom_fields()
 	create_employee_custom_fields()
@@ -17,8 +18,23 @@ def after_migrate():
 	workspace file (new link, new card) just sits there unused on every site
 	that already has the record, every migrate, until someone notices and
 	force-reloads it by hand."""
+	sync_app_fixtures()
 	frappe.reload_doc("MutaraCNP", "workspace", "mutaracnp", force=True)
 	frappe.db.commit()
+
+
+def sync_app_fixtures():
+	"""`bench install-app` syncs DocType schemas but does NOT run fixture
+	sync the way `bench migrate` does - fixtures only load if something
+	later runs a full site migrate. On a platform that installs an app
+	without ever migrating the site afterward (observed on Frappe Cloud),
+	that leaves the workspace pointing at a Custom HTML Block that was
+	never created - a blank workspace - and the Fertilizer Store Request
+	Workflow missing entirely. Calling this explicitly, on both install and
+	every migrate, means it can't depend on something else's deploy order."""
+	from frappe.utils.fixtures import sync_fixtures
+	sync_fixtures(app="mutaracnp")
+	print("MutaraCNP: synced fixtures (workspace navigation block, store request workflow)")
 
 
 def create_roles():
