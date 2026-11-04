@@ -2,24 +2,33 @@ import frappe
 
 
 def after_install():
+	ensure_setup()
+	print("MutaraCNP: post-install setup complete.")
+
+
+def after_migrate():
+	ensure_setup()
+
+
+def ensure_setup():
+	"""Everything after_install needs to do, re-run on every migrate too and
+	able to pick up wherever a previous attempt stopped. Deploy platforms
+	don't all run the same sequence of install/migrate steps - on Frappe
+	Cloud, installing this app has been observed to run DocType sync but
+	skip fixture sync (leaving the workspace blank - its body is one
+	Custom HTML Block reference, and that fixture never loaded) and to
+	abort entirely partway through after_install if any one step throws
+	(leaving roles created but CNP Farm/Crop seed data never reached).
+	Every step here checks before creating, so running the whole thing
+	again - on this migrate, the next one, whichever - costs nothing and
+	fixes itself rather than needing someone to notice and intervene."""
 	sync_app_fixtures()
+	frappe.reload_doc("MutaraCNP", "workspace", "mutaracnp", force=True)
 	create_roles()
 	create_material_request_custom_fields()
 	create_employee_custom_fields()
 	set_site_config()
 	seed_core_data()
-	frappe.db.commit()
-	print("MutaraCNP: post-install setup complete.")
-
-
-def after_migrate():
-	"""`bench migrate` doesn't resync an already-existing Workspace from its
-	source JSON the way it does a DocType - without this, an edit to the
-	workspace file (new link, new card) just sits there unused on every site
-	that already has the record, every migrate, until someone notices and
-	force-reloads it by hand."""
-	sync_app_fixtures()
-	frappe.reload_doc("MutaraCNP", "workspace", "mutaracnp", force=True)
 	frappe.db.commit()
 
 
