@@ -11,6 +11,16 @@ def after_install():
 	print("MutaraCNP: post-install setup complete.")
 
 
+def after_migrate():
+	"""`bench migrate` doesn't resync an already-existing Workspace from its
+	source JSON the way it does a DocType - without this, an edit to the
+	workspace file (new link, new card) just sits there unused on every site
+	that already has the record, every migrate, until someone notices and
+	force-reloads it by hand."""
+	frappe.reload_doc("MutaraCNP", "workspace", "mutaracnp", force=True)
+	frappe.db.commit()
+
+
 def create_roles():
 	"""Create the module's roles if missing. Flat roles only - Mutara is one
 	farm, so there's no per-farm role family to maintain."""

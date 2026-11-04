@@ -95,6 +95,12 @@ doc_events = {
     },
 }
 
+# Runs on every `bench migrate`, not just once - a Workspace record isn't
+# resynced from its source JSON by the normal DocType migrate step, so an
+# edit to it would otherwise sit unused until someone noticed and force-
+# reloaded it by hand.
+after_migrate = ["mutaracnp.mutaracnp.install.after_migrate"]
+
 # Scheduled Tasks
 # ---------------
 
