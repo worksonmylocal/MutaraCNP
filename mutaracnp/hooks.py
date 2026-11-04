@@ -10,6 +10,17 @@ app_license = "mit"
 
 required_apps = ["erpnext"]
 
+# Frappe v16 only lists apps on the desk's apps screen if they register here.
+add_to_apps_screen = [
+    {
+        "name": "mutaracnp",
+        "logo": "/assets/mutaracnp/images/mutaracnp-logo.svg",
+        "title": "MutaraCNP",
+        "route": "/app/mutaracnp",
+        "has_permission": "mutaracnp.mutaracnp.utils.farm_permissions.has_app_permission",
+    }
+]
+
 # Includes in <head>
 # ------------------
 

@@ -8,6 +8,14 @@ role check the /manager www page needs to gate access to itself.
 import frappe
 
 MANAGER_ROLE = "Farm Manager"
+APP_ROLES = {"CNP Agronomist", "Farm Manager", "Field Worker", "Storekeeper", "General Manager", "System Manager"}
+
+
+def has_app_permission():
+	"""Whether MutaraCNP shows on this user's apps screen - only for people
+	with a MutaraCNP role, so the rest of the company's desk users (HR,
+	clinic, livestock) don't get an icon for an app they can't use."""
+	return bool(APP_ROLES & set(frappe.get_roles()))
 
 
 def is_farm_manager(user=None):
