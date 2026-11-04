@@ -35,58 +35,66 @@ def create_roles():
 			print(f"MutaraCNP: created role {role_name}")
 
 
+def _create_custom_field_safely(spec):
+	"""Insert one Custom Field, tolerating failure. Adding any custom field to
+	a doctype makes Frappe re-validate *every* field already on it (including
+	ones belonging to other apps/customisations entirely unrelated to
+	MutaraCNP) - on a site with a pre-existing dangling field (e.g. a stray
+	Link whose target doctype no longer exists), that re-validation throws
+	and would otherwise abort the whole install over something MutaraCNP
+	didn't create and has no business fixing uninvited. One bad field
+	elsewhere on the site should degrade to "this one field didn't get
+	added," not "the app didn't install.\""""
+	name = f"{spec['dt']}-{spec['fieldname']}"
+	if frappe.db.exists("Custom Field", name):
+		return
+	try:
+		frappe.get_doc({"doctype": "Custom Field", **spec}).insert(ignore_permissions=True)
+		frappe.db.commit()
+		print(f"MutaraCNP: created {spec['dt']} custom field {spec['fieldname']}")
+	except Exception:
+		frappe.db.rollback()
+		frappe.log_error(
+			title=f"MutaraCNP install: could not add {spec['dt']}.{spec['fieldname']}",
+			message=frappe.get_traceback(),
+		)
+		print(
+			f"MutaraCNP: WARNING - could not create {spec['dt']} custom field "
+			f"{spec['fieldname']} (likely an unrelated pre-existing field on this "
+			f"site's {spec['dt']} doctype failed validation when re-checked - see "
+			"Error Log). Continuing install without it."
+		)
+
+
 def create_material_request_custom_fields():
 	"""Traceability fields on Material Request, for whatever procurement a
 	submitted programme eventually triggers."""
-	fields = [
-		("custom_fertilizer_programme", "Fertilizer Programme", "Fertilizer Programme", "material_request_type"),
-		("custom_block_fertilizer_plan", "Block Fertilizer Plan", "Block Fertilizer Plan", "custom_fertilizer_programme"),
-	]
-	for fieldname, label, options, insert_after in fields:
-		name = f"Material Request-{fieldname}"
-		if not frappe.db.exists("Custom Field", name):
-			frappe.get_doc({
-				"doctype": "Custom Field",
-				"dt": "Material Request",
-				"fieldname": fieldname,
-				"label": label,
-				"fieldtype": "Link",
-				"options": options,
-				"insert_after": insert_after,
-				"read_only": 1,
-			}).insert(ignore_permissions=True)
-			print(f"MutaraCNP: created Material Request custom field {fieldname}")
+	_create_custom_field_safely({
+		"dt": "Material Request", "fieldname": "custom_fertilizer_programme",
+		"label": "Fertilizer Programme", "fieldtype": "Link", "options": "Fertilizer Programme",
+		"insert_after": "material_request_type", "read_only": 1,
+	})
+	_create_custom_field_safely({
+		"dt": "Material Request", "fieldname": "custom_block_fertilizer_plan",
+		"label": "Block Fertilizer Plan", "fieldtype": "Link", "options": "Block Fertilizer Plan",
+		"insert_after": "custom_fertilizer_programme", "read_only": 1,
+	})
 
 
 def create_employee_custom_fields():
 	"""MutaraCNP's own field-team fields on Employee - kept separate from the
 	HR reports_to line, which stays the real org chart."""
-	fieldname = "custom_field_supervisor"
-	if not frappe.db.exists("Custom Field", f"Employee-{fieldname}"):
-		frappe.get_doc({
-			"doctype": "Custom Field",
-			"dt": "Employee",
-			"fieldname": fieldname,
-			"label": "Field Supervisor (MutaraCNP)",
-			"fieldtype": "Link",
-			"options": "Employee",
-			"insert_after": "reports_to",
-			"description": "Who manages this employee for fertilizer field-application purposes - set via the field app's Manage Team, separate from the HR reporting line above.",
-		}).insert(ignore_permissions=True)
-		print("MutaraCNP: created Employee custom_field_supervisor field")
-
-	block_fieldname = "custom_assigned_block"
-	if not frappe.db.exists("Custom Field", f"Employee-{block_fieldname}"):
-		frappe.get_doc({
-			"doctype": "Custom Field",
-			"dt": "Employee",
-			"fieldname": block_fieldname,
-			"label": "Assigned Block (MutaraCNP)",
-			"fieldtype": "Link",
-			"options": "Farm Block",
-			"insert_after": "custom_field_supervisor",
-		}).insert(ignore_permissions=True)
-		print("MutaraCNP: created Employee custom_assigned_block field")
+	_create_custom_field_safely({
+		"dt": "Employee", "fieldname": "custom_field_supervisor",
+		"label": "Field Supervisor (MutaraCNP)", "fieldtype": "Link", "options": "Employee",
+		"insert_after": "reports_to",
+		"description": "Who manages this employee for fertilizer field-application purposes - set via the field app's Manage Team, separate from the HR reporting line above.",
+	})
+	_create_custom_field_safely({
+		"dt": "Employee", "fieldname": "custom_assigned_block",
+		"label": "Assigned Block (MutaraCNP)", "fieldtype": "Link", "options": "Farm Block",
+		"insert_after": "custom_field_supervisor",
+	})
 
 
 def set_site_config():
