@@ -37,7 +37,6 @@
   {
    "fieldname": "block_number",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "Block Number",
    "reqd": 1
   },
@@ -52,7 +51,6 @@
   {
    "fieldname": "farm",
    "fieldtype": "Link",
-   "in_list_view": 1,
    "label": "Farm",
    "options": "CNP Farm",
    "read_only": 1
@@ -89,9 +87,10 @@
    "label": "Tree Count"
   },
   {
-   "description": "Agronomist's projected yield for this block, used in place of historical yield since Mutara is a new planting. Drives yield-tier classification for the block's Fertilizer Programme until real harvest history is available.",
+   "description": "Synced from the block's latest Whole Season Avocado Production Forecast (expected kg ÷ area). Blank until a forecast exists - young blocks then fall in the lowest yield tier. Drives the block's yield tier in a Fertilizer Programme.",
    "fieldname": "projected_yield_kg_ha",
    "fieldtype": "Float",
+   "in_list_view": 1,
    "label": "Projected Yield (Kg/Ha)"
   },
   {

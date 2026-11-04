@@ -721,7 +721,7 @@
         <div>
           <div class="qrow__name">${esc(b.block)}</div>
           <div class="qrow__meta">${num(b.area_ha, 2)} ha · ${num(b.tree_count)} trees ·
-            ${b.last_yield ? num(b.last_yield) + " kg/ha last year" : "no yield recorded"} ·
+            ${b.last_yield ? num(b.last_yield) + " kg/ha projected" : "no forecast yet"} ·
             ${num(b.done)}/${num(b.rounds)} rounds</div>
         </div>
         <div class="qrow__right">${bar(b.pct, b.pct >= 100 ? "good" : b.pct ? "warn" : "")}
@@ -738,7 +738,7 @@
           <div class="kpi__value">${num(t.area_ha, 1)}</div><div class="kpi__unit">hectares</div></div>
         <div class="kpi"><div class="kpi__label">Trees</div>
           <div class="kpi__value">${num(t.trees)}</div>
-          <div class="kpi__unit">${t.avg_yield ? num(t.avg_yield) + " kg/ha avg yield" : "no yield recorded"}</div></div>
+          <div class="kpi__unit">${t.avg_yield ? num(t.avg_yield) + " kg/ha avg projected" : "no forecasts yet"}</div></div>
         <div class="kpi"><div class="kpi__label">Rounds applied</div>
           <div class="kpi__value ${t.pct >= 100 ? "good" : ""}">${num(t.done)}/${num(t.rounds)}</div>
           <div class="kpi__unit">${num(t.pct)}% done</div></div>
@@ -1235,7 +1235,8 @@
           || `<div class="none" style="padding:0">No rounds planned.</div>`}</div>
       </div>
 
-      <div class="card__head" style="margin:22px 0 10px"><h3>Last year's yield</h3></div>
+      <div class="card__head" style="margin:22px 0 10px"><h3>Projected yield</h3></div>
+      ${y.block ? `
       <div class="statline"><span class="statline__k">This block</span>
         <span class="statline__v">${num(y.block)} kg/ha</span></div>
       ${bar(y.farm_best ? (y.block / y.farm_best) * 100 : 0,
@@ -1244,8 +1245,12 @@
         <span class="statline__v">${num(y.farm_avg)} · ${num(y.farm_best)} kg/ha</span></div>
       <div class="none" style="text-align:left;padding:10px 0">
         ${vsAvg >= 0 ? "Above" : "Below"} the farm average by ${num(Math.abs(vsAvg))}% —
-        which is what put this block in its yield tier, and so what set these rates.
-      </div>
+        this projection is what put the block in its yield tier, and so what set these rates.
+      </div>` : `
+      <div class="none" style="text-align:left;padding:10px 0">
+        No forecast for this block yet — it's too young to project, so it sits in the lowest
+        yield tier until Avocado Production Forecast has a figure for it.
+      </div>`}
 
       <div class="card__head" style="margin:18px 0 10px"><h3>Rounds</h3></div>
       <div class="queue queue--5">${d.plans.map((p) => `
