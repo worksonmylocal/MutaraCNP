@@ -414,10 +414,9 @@
     farm: {
       doctype: "CNP Farm", title: "Farm", icon: "🌍", tint: "rgba(100,116,139,.15)", colour: "#64748b",
       sub: "The farms this module plans for.",
-      list: ["name", "kaitet_farm_code", "default_crop", "is_active"],
+      list: ["name", "default_crop", "is_active"],
       fields: [
         { name: "farm_name", label: "Farm Name", reqd: 1 },
-        { name: "kaitet_farm_code", label: "Farm Code" },
         { name: "default_crop", label: "Default Crop", type: "link", doctype: "Crop" },
         { name: "farm_manager", label: "Farm Manager", type: "link", doctype: "User" },
         { name: "warehouse", label: "Warehouse", type: "link", doctype: "Warehouse" },

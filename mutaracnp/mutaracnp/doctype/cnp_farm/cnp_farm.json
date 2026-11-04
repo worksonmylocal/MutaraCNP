@@ -10,7 +10,6 @@
   "farm_name",
   "is_active",
   "default_crop",
-  "kaitet_farm_code",
   "column_break_farm",
   "farm_manager",
   "warehouse"
@@ -39,12 +38,6 @@
    "fieldtype": "Link",
    "label": "Default Crop",
    "options": "Crop"
-  },
-  {
-   "description": "Matches the custom_farm value on Kaitet's Warehouse records, used to resolve this Farm during the Kaitet sync.",
-   "fieldname": "kaitet_farm_code",
-   "fieldtype": "Data",
-   "label": "Kaitet Farm Code"
   },
   {
    "fieldname": "column_break_farm",
