@@ -7,12 +7,6 @@ parameter the way the multi-farm reference app's api.py does - every
 record already belongs to the one CNP Farm, so there's nothing to scope
 between. A few functions keep a `farm=None` parameter for call-site
 compatibility with ported frontend code; it is accepted and ignored.
-
-The nutrient-rate calculation engine (utils/calculation_engine.py) now exists
-and desk_calculate / get_yield_tier_distribution call into it for real.
-desk_get_rate_grid, desk_save_rates and export_programme_excel remain
-stubbed - they're a manual block-by-block rate override layer on top of the
-engine's own output, a separate feature the engine itself doesn't need.
 """
 
 import frappe
@@ -23,11 +17,6 @@ from mutaracnp.mutaracnp.utils.calculation_engine import calculate_programme, ge
 
 MONTHS = ["January", "February", "March", "April", "May", "June",
           "July", "August", "September", "October", "November", "December"]
-
-CALC_ENGINE_PENDING = {
-	"calculation_engine_pending": True,
-	"message": "The fertilizer rate calculation engine hasn't been built yet for Mutara - this is next.",
-}
 
 
 def _current_employee():
@@ -1505,20 +1494,22 @@ def desk_calculate(programme):
 
 
 @frappe.whitelist()
-def desk_get_rate_grid(programme):
-	"""The manual block-by-block rate override grid is a separate feature on
-	top of the engine's own output - not built yet."""
-	return CALC_ENGINE_PENDING
-
-
-@frappe.whitelist()
-def desk_save_rates(programme, rates):
-	return CALC_ENGINE_PENDING
-
-
-@frappe.whitelist()
 def export_programme_excel(programme, section=None):
-	frappe.throw("Programme export isn't available yet - it depends on the calculation engine, which is coming in the next phase.")
+	"""One sheet, one row per block - every product's Kg/Ha and round-by-
+	round split side by side. With `section`, only that section's blocks."""
+	from mutaracnp.mutaracnp.utils.excel_export import build_programme_workbook
+
+	doc = frappe.get_doc("Fertilizer Programme", programme)
+	doc.check_permission("read")
+	if not doc.get("programme_lines"):
+		frappe.throw(f"{programme} has no programme lines yet - run the calculation first.")
+	if section and not any(b.section == section for b in doc.get("block_yield_data", [])):
+		frappe.throw(f"{programme} has no blocks in {section}.")
+
+	suffix = f" - {section}" if section else ""
+	frappe.response.filename = f"{programme.replace('/', '-')}{suffix}.xlsx"
+	frappe.response.filecontent = build_programme_workbook(doc, section=section)
+	frappe.response.type = "download"
 
 
 @frappe.whitelist()
